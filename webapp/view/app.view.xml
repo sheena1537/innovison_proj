@@ -1,0 +1,8 @@
+<mvc:View controllerName="com.sap.innovision.controller.app" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" 	xmlns:f="sap.f">
+
+		<SplitApp id="splitapp">
+		
+		</SplitApp>
+
+		
+</mvc:View>
