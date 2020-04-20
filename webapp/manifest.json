@@ -85,7 +85,7 @@
 				},
 				{
 					"name": "Detail_r",
-					"pattern": "botid",
+					"pattern": "{botid}",
 					"target": [
 						"Master_t", "Detail_t"
 					]

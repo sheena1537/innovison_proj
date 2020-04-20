@@ -11,8 +11,17 @@ sap.ui.define([
 		 * @memberOf com.sap.innovision.view.Detail
 		 */
 		onInit: function () {
+			var oR = sap.ui.core.UIComponent.getRouterFor(this);
+			oR.getRoute("Detail_r").attachMatched(this._onAttachMatched, this);
 
 		},
+		_onAttachMatched: function(oEvent){
+			var oArg = oEvent.getParameter("arguments");
+			var botname = oArg.botid;
+			alert(botname);
+			
+			
+		}
 
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

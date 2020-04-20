@@ -59,13 +59,13 @@ sap.ui.define([
 		},
 		
 		onSelectionChange: function(oEvent){
-				console.log(oEvent);
-			var botname = oEvent.getSource().getBindingContext().getProperty("_attributes/name");
-		
-			// var oR = sap.ui.core.UIComponent.getRouterFor(this);
-			// oR.navTo("r_view_d", {sI: ss});
-		}
-
+			
+			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
+			var botname = evnt.getBindingContext().getProperty("_attributes/name");
+			var oR = sap.ui.core.UIComponent.getRouterFor(this);
+			oR.navTo("Detail_r", {"botid": botname});
+		},
+       
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
