@@ -61,9 +61,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -73,11 +75,22 @@
 				"viewPath": "com.sap.innovision.view",
 				"clearTarget": false
 			},
-			"routes": [{
-				"name": "Master_r",
-				"pattern": "",
-				"target": ["Master_t"]
-			}],
+			"routes": [
+				{
+					"name": "Master_r",
+					"pattern": "",
+					"target": [
+						"Master_t"
+					]
+				},
+				{
+					"name": "Detail_r",
+					"pattern": "botid",
+					"target": [
+						"Master_t", "Detail_t"
+					]
+				}
+			],
 			"targets": {
 				"Master_t": {
 					"viewType": "XML",
@@ -86,6 +99,14 @@
 					"viewId": "master_id",
 					"controlId": "splitapp",
 					"controlAggregation": "masterPages"
+				},
+				"Detail_t": {
+					"viewType": "XML",
+					"viewName": "Detail",
+					"viewLevel": 1,
+					"viewId": "detail_id",
+					"controlId": "splitapp",
+					"controlAggregation": "detailPages"
 				}
 			}
 		}
