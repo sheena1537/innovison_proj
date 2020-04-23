@@ -1,8 +1,12 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"../model/formatter"
-], function (Controller, JSONModel, formatter) {
+	"../model/formatter",
+		"sap/ui/model/Filter",
+	"sap/ui/model/Sorter",
+	"sap/ui/model/FilterOperator"
+	
+], function (Controller, JSONModel, formatter, Filter, FilterOperator, Sorter) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Master", {
@@ -14,34 +18,38 @@ sap.ui.define([
 		 */
 		formatter: formatter,
 		onInit: function () {
-// 				var oBotData = 
-// 			{
-// 	       bots: [{
-// 			BotName: "Bot1",
-// 			Status: "PASS",
-// 			starttime: "start time: 23-08-2019 12:32:987"
-// 		},
-// 		{
-// 		BotName: "Bot2",
-// 			Status: "FAIL",
-// 			starttime: "start time: 23-08-2019 12:32:987"
-// 		},
-// 		{
-// 			BotName: "Bot3",
-// 			Status: "PASS",
-// 			starttime: "start time: 23-07-2019 12:32:987"
-// 		}
-// 	]
-// };
+	// 			var oBotData = 
+	// {	bot: [{
+	// 		BotName: "Bot1",
+	// 		Status: "PASS",
+	// 		starttime: "start time: 23-08-2019 12:32:987"
+	// 	},
+	// 	{
+	// 	BotName: "Bot2",
+	// 		Status: "FAIL",
+	// 		starttime: "start time: 23-08-2019 12:32:987"
+	// 	},
+	// 	{
+	// 		BotName: "Bot3",
+	// 		Status: "PASS",
+	// 		starttime: "start time: 23-07-2019 12:32:987"
+	// 	}
+	// ]};
 
-// 		var oModel = new JSONModel(oBotData);
+
+	// 	var oModel = new JSONModel(oBotData);
 		
-// 		this.getView().setModel(oModel);
+	// 	this.getView().setModel(oModel,"A");
+	// 	console.log(oModel);
+this._oListFilterState = {
+				aFilter: [],
+				aSearch: []
+			};
 		var oList = this.byId("list");
 					$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "http://127.0.0.1:3000/output",
+				url: "http://127.0.0.1:3004/output",
 				cors: true,
 				secure: true,
 				headers: {
@@ -49,11 +57,11 @@ sap.ui.define([
 				},
 				success: function (data, textStatus, jqXHR) {
 					
+				//	console.log(data.suite[0].suite);
 					var oModel = new JSONModel();
-					oModel.setData(data);
+					oModel.setData(data.suite[0].suite);
 					oList.setModel(oModel);
-				//	console.log(data.statistics.suite.stat);
-					
+				console.log(oModel);
 				}
 			});
 		},
@@ -61,10 +69,30 @@ sap.ui.define([
 		onSelectionChange: function(oEvent){
 			
 			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
-			var botname = evnt.getBindingContext().getProperty("_attributes/name");
+			var botname = evnt.getBindingContext().getProperty("$/source");
+			botname = (botname.split('\\')).slice(-2,-1);
+			//console.log(botname[0]);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
-			oR.navTo("Detail_r", {"botid": botname});
+			oR.navTo("Detail_r", {"botid": botname[0]});
 		},
+		
+		onSearch : function (evt) {
+	// create model filter
+	var filters = [];
+	var query = evt.getParameter("query");
+	console.log("query");
+	if (query && query.length > 0) {
+		var filter = new sap.ui.model.Filter("$/source", sap.ui.model.FilterOperator.Contains, query);
+		filters.push(filter);
+	}
+	
+
+	// update list binding
+	var list = this.getView().byId("list");
+	
+	var binding = list.getBinding("items");
+	binding.filter(filters);
+}
        
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

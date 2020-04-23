@@ -1,10 +1,43 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.sap.innovision.controller.Detail"
-	xmlns:html="http://www.w3.org/1999/xhtml">
-	<App>
-		<pages>
-			<Page title="Bot run details" id="detail_id">
-				<content></content>
-			</Page>
-		</pages>
-	</App>
+<mvc:View controllerName="com.sap.innovision.controller.Detail" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:semantic="sap.f.semantic"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+    <semantic:SemanticPage id="detail_id">
+        <semantic:titleHeading>
+            <Title binding='{/bots}' text="{BotName}" level="H2"/>
+        </semantic:titleHeading>
+        <semantic:headerContent>
+            <ObjectAttribute binding='{/bots}' text="Developer: {Developer}"/>
+            <ObjectAttribute binding='{/bots}' text="Total test cases: {total}"/>
+            <ObjectAttribute binding='{/bots}' text="Passed: {passed}, Failed: {failed}"/>
+    <!--        <Link-->
+				<!--text="View log file"-->
+				<!--target="_blank"-->
+				<!--href="http://127.0.0.1:3002/output" />-->
+				<Button text="View Log" press=".onLogClick"/>
+        </semantic:headerContent>
+        <semantic:content>
+        	<core:HTML id="html"></core:HTML>
+            
+            <!--<core:HTML id="html1" content="&lt;iframe src=&quot;http://127.0.0.1:3002/output&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
+            <!--<core:HTML id="html" content="&lt;iframe src=&quot;http://127.0.0.1:3001/output&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
+            <!--<core:HTML content="&lt;iframe src=&quot;../localService/mockdata/report1.html&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
+            <!--<html:iframe id="log" height="111" src=""/>-->
+            <!--<html:script src="file.js" type="application/javascript"/>-->
+        </semantic:content>
+        <!--Semantic ShareMenu Buttons-->
+        <semantic:sendEmailAction>
+            <semantic:SendEmailAction id="shareEmail" press=".onSendEmailPress"/>
+        </semantic:sendEmailAction>
+        <semantic:closeAction>
+            <semantic:CloseAction id="closeColumn" press=".onCloseDetailPress"/>
+        </semantic:closeAction>
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction id="enterFullScreen"
+                visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction id="exitFullScreen"
+                visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:exitFullScreenAction>
+    </semantic:SemanticPage>
 </mvc:View>

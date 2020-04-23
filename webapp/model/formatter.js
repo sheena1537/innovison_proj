@@ -10,10 +10,17 @@ sap.ui.define([], function () {
 		 * @returns {string} formatted status
 		 */
 		status : function (sStatus) {
-		var datime ="Last Run: "+sStatus.slice(6,8)+"/"+sStatus.slice(4,6)+"/"+sStatus.slice(0,4)+" "+sStatus.slice(9,21);
+		var datime =sStatus.slice(6,8)+"/"+sStatus.slice(4,6)+"/"+sStatus.slice(0,4)+" "+sStatus.slice(9,21);
 			return datime;
 		// return sStatus;
 		},
+		
+		name : function (name) {
+		    var chatbot_name = (name.split('\\')).slice(-2,-1);
+			return chatbot_name;
+		// return sStatus;
+		},
+	
 	
 	
 			status1 :  function (sStatus) {
@@ -26,6 +33,14 @@ sap.ui.define([], function () {
 				} else {
 					return "None";
 				}
+		},
+		
+		system : function(sys){
+			var sys_name = (sys.split('-'))[0];
+			console.log(sys_name);
+		    return sys_name;
 		}
+		
+		
 	};
 });

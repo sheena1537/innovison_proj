@@ -9,7 +9,7 @@
 			<Title id="masterPageTitle" text="Test automation framework" level="H2"/>
 		</semantic:titleHeading>
 		<semantic:content>
-			<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/suite/suite/}" noDataText="No data available"
+			<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/}" noDataText="No data available"
 				mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}" growing="true" growingScrollToLoad="true"
 				updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
 				<infoToolbar>
@@ -31,61 +31,22 @@
 				</headerToolbar>
 			
 				<items>
-					<ObjectListItem type="Navigation" press=".onSelectionChange" title="{_attributes/name}">
+					
+					<ObjectListItem type="Navigation" press=".onSelectionChange" title="{path: '$/source', formatter: '.formatter.name'}">
+						<!--<ObjectStatus text="status"/>-->
 						<firstStatus>
-							<ObjectStatus text="{status/_attributes/status}" icon="sap-icon://circle-task-2"
-								state="{ path: 'status/_attributes/status', formatter: '.formatter.status1' }"/>
+							<ObjectStatus text="{path: 'status/0/$/status'}" icon="sap-icon://circle-task-2"
+								state="{ path: 'status/0/$/status', formatter: '.formatter.status1' }"/>
 						</firstStatus>
 						<attributes>
-								<ObjectAttribute text="{ parts:[ {path:'status/_attributes/starttime'}], formatter: '.formatter.status' }"/>
+						<!--<ObjectAttribute  text="status: {  path: 'status/0/$/status' }"/>-->
+								<ObjectAttribute text="Last run: { parts:[ {path:'status/0/$/starttime'}], formatter: '.formatter.status' }"/>
+									<ObjectAttribute text="system: { parts:[ {path:'$/name'}], formatter: '.formatter.system' }"/>
 						</attributes>
 					</ObjectListItem>
 				</items>
 			</List>
 		</semantic:content>
 	</semantic:SemanticPage>
-	<!--			</content>-->
-	<!--		</Page>-->
-	<!--	</pages>-->
-	<!--</App>-->
-	<!--	<semantic:SemanticPage  preserveHeaderStateOnScroll="true" toggleHeaderOnTitleClick="false">-->
-	<!--	<semantic:titleHeading>-->
-	<!--		<Title id="masterPageTitle" text="{masterView>/title}" level="H2"/>-->
-	<!--	</semantic:titleHeading>-->
-	<!--	<semantic:content>-->
-	<!--		 For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
-	<!--		<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/bots}" busyIndicatorDelay="{masterView>/delay}"-->
-	<!--			noDataText="{masterView>/noDataText}" mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}" growing="true"-->
-	<!--			growingScrollToLoad="true" updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">-->
-	<!--			<infoToolbar>-->
-	<!--				<Toolbar active="true" id="filterBar" visible="{masterView>/isFilterBarVisible}" press=".onOpenViewSettings">-->
-	<!--					<Title id="filterBarLabel" text="{masterView>/filterBarLabel}" level="H3"/>-->
-	<!--				</Toolbar>-->
-	<!--			</infoToolbar>-->
-	<!--			<headerToolbar>-->
-	<!--				<OverflowToolbar>-->
-	<!--					<SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" search=".onSearch" width="auto">-->
-	<!--						<layoutData>-->
-	<!--							<OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>-->
-	<!--						</layoutData>-->
-	<!--					</SearchField>-->
-	<!--					<ToolbarSpacer/>-->
-	<!--					<Button id="sortButton" press=".onOpenViewSettings" icon="sap-icon://sort" type="Transparent"/>-->
-	<!--					<Button id="filterButton" press=".onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>-->
-	<!--				</OverflowToolbar>-->
-	<!--			</headerToolbar>-->
-	<!--			<items>-->
-	<!--				<ObjectListItem type="Navigation" press=".onSelectionChange" title="{BotName}">-->
-	<!--					<firstStatus>-->
-	<!--						<ObjectStatus text="{Status}" icon="sap-icon://circle-task-2"-->
-	<!--							/>-->
-	<!--					</firstStatus>-->
-	<!--					<attributes>-->
-	<!--						<ObjectAttribute text="{ parts:[ {path:'starttime'}]' }"/>-->
-	<!--					</attributes>-->
-	<!--				</ObjectListItem>-->
-	<!--			</items>-->
-	<!--		</List>-->
-	<!--	</semantic:content>-->
-	<!--</semantic:SemanticPage>-->
+
 </mvc:View>
