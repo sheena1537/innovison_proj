@@ -45,21 +45,22 @@ this._oListFilterState = {
 				aFilter: [],
 				aSearch: []
 			};
+		
 		var oList = this.byId("list");
 					$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "http://127.0.0.1:3004/output",
+				url: "http://127.0.0.1:3005/output",
 				cors: true,
 				secure: true,
 				headers: {
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					
-				//	console.log(data.suite[0].suite);
+					 console.log(data);
+					//console.log(data.suite[0].suite);
 					var oModel = new JSONModel();
-					oModel.setData(data.suite[0].suite);
+					oModel.setData(data.robot.suite.suite);
 					oList.setModel(oModel);
 				console.log(oModel);
 				}
@@ -69,11 +70,13 @@ this._oListFilterState = {
 		onSelectionChange: function(oEvent){
 			
 			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
-			var botname = evnt.getBindingContext().getProperty("$/source");
+			var botname = evnt.getBindingContext().getProperty("_attributes/source");
+		    var system_name = evnt.getBindingContext().getProperty("_attributes/name");
+		    system_name = (system_name.split('-'))[0];
 			botname = (botname.split('\\')).slice(-2,-1);
 			//console.log(botname[0]);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
-			oR.navTo("Detail_r", {"botid": botname[0]});
+			oR.navTo("Detail_r", {"botid": botname[0], "sysid": system_name});
 		},
 		
 		onSearch : function (evt) {
@@ -82,7 +85,7 @@ this._oListFilterState = {
 	var query = evt.getParameter("query");
 	console.log("query");
 	if (query && query.length > 0) {
-		var filter = new sap.ui.model.Filter("$/source", sap.ui.model.FilterOperator.Contains, query);
+		var filter = new sap.ui.model.Filter("_attributes/source", sap.ui.model.FilterOperator.Contains, query);
 		filters.push(filter);
 	}
 	

@@ -37,7 +37,7 @@ sap.ui.define([], function () {
 		
 		system : function(sys){
 			var sys_name = (sys.split('-'))[0];
-			console.log(sys_name);
+			//console.log(sys_name);
 		    return sys_name;
 		}
 		

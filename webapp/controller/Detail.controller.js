@@ -15,6 +15,25 @@ sap.ui.define([
 		    
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			oR.getRoute("Detail_r").attachMatched(this._onAttachMatched, this);
+			var oView = this.getView();
+								$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: "http://127.0.0.1:3005/output",
+				cors: true,
+				secure: true,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					console.log(data);
+					//console.log(data.suite[0].suite);
+					var oModel = new JSONModel();
+					oModel.setData(data.robot.suite.suite);
+					oView.setModel(oModel);
+			     	console.log(oModel);
+				}
+			});
 		// 		var oBotData = 
 		// 	{
 	 //      bots: {
@@ -35,10 +54,11 @@ sap.ui.define([
 		_onAttachMatched: function(oEvent){
 			this.oArg = oEvent.getParameter("arguments");
 			this.botname = this.oArg.botid;
+			this.sysname = this.oArg.sysid;
 			var html=this.getView().byId("html");
 			 //botname = "Physical_Inventory_Count_Generate_Count_List";
 			 this.botname_url = (this.botname).replace(/ /g, "%20");
-			 var url = "http://127.0.0.1:3004/report/"+this.botname_url;
+			 var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
 			 console.log(url);
 		     var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
             html.setContent(data1);
@@ -51,10 +71,18 @@ sap.ui.define([
 		
 		onLogClick: function(oEvent){
 		var html=this.getView().byId("html");
-		var url = "http://127.0.0.1:3004/log/"+this.botname_url;
+		var url = "http://127.0.0.1:3005/log/"+this.botname_url+"/"+this.sysname;
 		 var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
          html.setContent(data1);
+         this.getView().byId("gb").setVisible(true);
 			
+		},
+		onBack: function(oEvent){
+			var html=this.getView().byId("html");
+		var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+		 var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
+         html.setContent(data1);
+		this.getView().byId("gb").setVisible(false);	
 		}
 		
 		

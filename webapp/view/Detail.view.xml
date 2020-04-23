@@ -6,23 +6,14 @@
             <Title binding='{/bots}' text="{BotName}" level="H2"/>
         </semantic:titleHeading>
         <semantic:headerContent>
-            <ObjectAttribute binding='{/bots}' text="Developer: {Developer}"/>
-            <ObjectAttribute binding='{/bots}' text="Total test cases: {total}"/>
-            <ObjectAttribute binding='{/bots}' text="Passed: {passed}, Failed: {failed}"/>
-    <!--        <Link-->
-				<!--text="View log file"-->
-				<!--target="_blank"-->
-				<!--href="http://127.0.0.1:3002/output" />-->
+            <ObjectAttribute binding='{/}' text="Developer: {status/_attributes/starttime}"/>
+            <ObjectAttribute binding='{/}' text="Total test cases: {total}"/>
+            <ObjectAttribute binding='{/}' text="Passed: {passed}, Failed: {failed}"/>
 				<Button text="View Log" press=".onLogClick"/>
+				<Button id="gb" text="Go back" visible="false" press=".onBack"/>
         </semantic:headerContent>
         <semantic:content>
         	<core:HTML id="html"></core:HTML>
-            
-            <!--<core:HTML id="html1" content="&lt;iframe src=&quot;http://127.0.0.1:3002/output&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
-            <!--<core:HTML id="html" content="&lt;iframe src=&quot;http://127.0.0.1:3001/output&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
-            <!--<core:HTML content="&lt;iframe src=&quot;../localService/mockdata/report1.html&quot; height=&quot;800&quot; width=&quot;100%&quot; /&gt;"></core:HTML>-->
-            <!--<html:iframe id="log" height="111" src=""/>-->
-            <!--<html:script src="file.js" type="application/javascript"/>-->
         </semantic:content>
         <!--Semantic ShareMenu Buttons-->
         <semantic:sendEmailAction>
