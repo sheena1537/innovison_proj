@@ -11,7 +11,7 @@
 				<items>
 					<ViewSettingsItem text="PASS" key="PASS" />
 					<ViewSettingsItem text="FAIL" key="FAIL" />
-					<ViewSettingsItem text="RUNNING" key="RUNNING" />
+					<!--<ViewSettingsItem text="RUNNING" key="RUNNING" />-->
 				</items>
 			</ViewSettingsFilterItem>
 			<ViewSettingsFilterItem

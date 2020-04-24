@@ -55,7 +55,9 @@ sap.ui.define([
 			this.oArg = oEvent.getParameter("arguments");
 			this.botname = this.oArg.botid;
 			this.sysname = this.oArg.sysid;
+			var t = this;
 			var oView = this.getView();
+			
 			var url1 = "http://127.0.0.1:3005/output/"+this.botname+"/"+this.sysname;
 			$.ajax({
 				type: "GET",
@@ -67,22 +69,72 @@ sap.ui.define([
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					console.log("data");
-					console.log(data);
-					var oModel = new JSONModel();
-					oModel.setData(data.robot.statistics);
+				var	oModel = new JSONModel();
+				var data1 = data.robot.statistics;
+					oModel.setData(data1);
 					oView.setModel(oModel);
+					var pass_no = data1.total.stat[1]._attributes.pass;
+                   var fail_no = data1.total.stat[1]._attributes.fail;
+                   var model = new sap.ui.model.json.JSONModel();
+					model.setData({
+						Report :[
+							{
+							desc : "pass: "+pass_no,
+							num: pass_no
+							},
+							{
+								desc : "fail: "+fail_no,
+								num : fail_no
+							}
+						]
+					});
+	    var	oVizFrame = oView.byId("idVizFrame");
+	    var oVizPop = oView.byId("idPopOver2");
+	    //""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	    oVizFrame.setVizProperties({
+	
+			title: {
+				visible: false
+			},
+		
+			plotArea: {
+			
+				colorPalette :  ['#2b7d2b', '#bb0000']
+			}
+			
+		});
+		oVizPop.connect(oVizFrame.getVizUid());
+		
+		 //""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+		oVizFrame.setModel(model);
 				}
 			});
 			oView.byId("title").setText(this.botname);
 			var html=this.getView().byId("html");
-			 //botname = "Physical_Inventory_Count_Generate_Count_List";
 			this.botname_url = (this.botname).replace(/ /g, "%20");
 			var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
-			console.log(url);
 		    var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
             html.setContent(data1);
-			//alert(botname);
+            
 			
 		},
 		onSendEmailPress: function(oEvent){
