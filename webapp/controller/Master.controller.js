@@ -7,7 +7,7 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator",
 	'sap/ui/Device'
 
-], function (Controller, JSONModel, formatter, Filter, FilterOperator, Sorter,Device) {
+], function (Controller, JSONModel, formatter, Filter, FilterOperator, Sorter, Device) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Master", {
@@ -103,21 +103,22 @@ sap.ui.define([
 		},
 
 		onSort: function (evt) {
+			console.log("filtering");
+			this.createViewSettingsDialog("com.sap.innovision.view.SortingDialog").open();
+			// var oView = this.getView();
+			// var oList = this.byId("list");
+			// var oBinding = oList.getBinding("items");
 
-			var oView = this.getView();
-			var oList = this.byId("list");
-			var oBinding = oList.getBinding("items");
+			// var SORTKEY = "status/_attributes/starttime";
+			// var DESCENDING = false;
+			// var GROUP = false;
+			// var aSorter = [];
 
-			var SORTKEY = "status/_attributes/starttime";
-			var DESCENDING = false;
-			var GROUP = false;
-			var aSorter = [];
+			// aSorter.push(new sap.ui.model.Sorter(SORTKEY, DESCENDING, GROUP));
+			// oBinding.sort(aSorter);
 
-			aSorter.push(new sap.ui.model.Sorter(SORTKEY, DESCENDING, GROUP));
-			oBinding.sort(aSorter);
-
-			var oModel = this.getView().getModel();
-			oModel.refresh();
+			// var oModel = this.getView().getModel();
+			// oModel.refresh();
 
 		},
 		createViewSettingsDialog: function (sDialogFragmentName) {
@@ -162,6 +163,36 @@ sap.ui.define([
 			binding.filter(aFilters);
 
 			// apply filter settings
+		},
+		handleSortingDialogConfirm: function (oEvent) {
+			var oView = this.getView();
+			var oList = this.byId("list");
+			var oBinding = oList.getBinding("items");
+
+			var mParams = oEvent.getParameters();
+			var aSorter = [];
+			// 	console.log(oEvent);
+			// console.log(mParams);
+			mParams.filterItems.forEach(function (oItem) {
+				// console.log(oItem.oParent.getId());
+				var ParentKey = oItem.getParent().getKey();
+				var aSplit = oItem.getKey(),
+					sOrder = aSplit;
+				if (ParentKey === "STARTTIME") {
+					var SORTKEY = "status/_attributes/starttime";
+					var DESCENDING;
+					if(sOrder==="ACSENDING")
+						DESCENDING=false;
+					else
+						DESCENDING=true;
+					var GROUP = false;
+					aSorter.push(new sap.ui.model.Sorter(SORTKEY, DESCENDING, GROUP));
+				} 
+			});
+			oBinding.sort(aSorter);
+
+			var oModel = this.getView().getModel();
+			oModel.refresh();
 		}
 
 		/**

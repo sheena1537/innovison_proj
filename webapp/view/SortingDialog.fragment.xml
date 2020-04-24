@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		confirm="handleSortingDialogConfirm">
+		<filterItems>
+			<ViewSettingsFilterItem
+				text="LAST RUN"
+				key="STARTTIME"
+				multiSelect="false" id="sc">
+				<items>
+					<ViewSettingsItem text="ACSENDING" key="ACSENDING" />
+					<ViewSettingsItem text="DESCENDING" key="DESCENDING" />
+				</items>
+			</ViewSettingsFilterItem>
+		</filterItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
