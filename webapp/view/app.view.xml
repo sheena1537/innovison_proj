@@ -1,5 +1,7 @@
-<mvc:View controllerName="com.sap.innovision.controller.app" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" 	xmlns:f="sap.f">
-
+<mvc:View id="appview" controllerName="com.sap.innovision.controller.app" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" 	xmlns:f="sap.f">
+		<App id="myapp_fullscreen">
+			
+		</App>
 		<SplitApp id="splitapp">
 		
 		</SplitApp>

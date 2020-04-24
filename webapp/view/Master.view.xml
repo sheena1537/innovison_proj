@@ -26,7 +26,7 @@
 						</SearchField>
 						<ToolbarSpacer/>
 						<Button id="sortButton" press=".onSort" icon="sap-icon://sort" type="Transparent"/>
-						<Button id="filterButton" press=".onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>
+						<Button id="filterButton" press=".handleFilterButtonPressed" icon="sap-icon://filter" type="Transparent"/>
 					</OverflowToolbar>
 				</headerToolbar>
 			

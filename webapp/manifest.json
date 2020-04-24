@@ -73,14 +73,16 @@
 				"viewType": "XML",
 				"async": true,
 				"viewPath": "com.sap.innovision.view",
-				"clearTarget": false
+				"clearTarget": false,
+				"controlId": "myapp_fullscreen",
+				"controlAggregation": "pages"
 			},
 			"routes": [
 				{
 					"name": "Master_r",
 					"pattern": "",
 					"target": [
-						"Master_t"
+						"FullScreen_t"
 					]
 				},
 				{
@@ -107,6 +109,12 @@
 					"viewId": "detail_id",
 					"controlId": "splitapp",
 					"controlAggregation": "detailPages"
+				},
+				"FullScreen_t":{
+					"viewType": "XML",
+					"viewName": "Master",
+					"viewLevel": 1,
+					"viewId": "master_id"
 				}
 			}
 		}

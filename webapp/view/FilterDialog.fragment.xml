@@ -1,0 +1,28 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		confirm="handleFilterDialogConfirm">
+		<filterItems>
+			<ViewSettingsFilterItem
+				text="STATUS"
+				key="STATUS"
+				multiSelect="false" id="tc">
+				<items>
+					<ViewSettingsItem text="PASS" key="PASS" />
+					<ViewSettingsItem text="FAIL" key="FAIL" />
+					<ViewSettingsItem text="RUNNING" key="RUNNING" />
+				</items>
+			</ViewSettingsFilterItem>
+			<ViewSettingsFilterItem
+				text="SYSTEM"
+				key="SYSTEM"
+				multiSelect="false" id="tc1">
+				<items>
+					<ViewSettingsItem text="CE" key="CE" />
+					<ViewSettingsItem text="OP_1909" key="OP_1909" />
+				</items>
+			</ViewSettingsFilterItem>
+		</filterItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
