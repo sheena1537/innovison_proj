@@ -57,11 +57,11 @@ this._oListFilterState = {
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					 console.log(data);
-					//console.log(data.suite[0].suite);
+					console.log(data);
 					var oModel = new JSONModel();
-					oModel.setData(data.robot.suite.suite);
+					oModel.setData(data.robot.suite);
 					oList.setModel(oModel);
+					console.log('oModel');
 				console.log(oModel);
 				}
 			});
@@ -95,6 +95,25 @@ this._oListFilterState = {
 	
 	var binding = list.getBinding("items");
 	binding.filter(filters);
+},
+
+onSort: function(evt){
+	
+	var oView = this.getView();
+        	var oList = this.byId("list");
+        var oBinding = oList.getBinding("items");
+
+        var SORTKEY = "status/_attributes/starttime";
+        var DESCENDING = false;
+        var GROUP = false;
+        var aSorter = [];
+
+        aSorter.push(new sap.ui.model.Sorter(SORTKEY, DESCENDING, GROUP));
+        oBinding.sort(aSorter);
+        
+        var oModel = this.getView().getModel();
+        oModel.refresh();
+	
 }
        
 		/**

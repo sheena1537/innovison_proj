@@ -55,14 +55,35 @@ sap.ui.define([
 			this.oArg = oEvent.getParameter("arguments");
 			this.botname = this.oArg.botid;
 			this.sysname = this.oArg.sysid;
+			var oView = this.getView();
+			var url1 = "http://127.0.0.1:3005/output/"+this.botname+"/"+this.sysname;
+			$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: url1,
+				cors: true,
+				secure: true,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					console.log("data");
+					console.log(data);
+					var oModel = new JSONModel();
+					oModel.setData(data.robot.statistics);
+					oView.setModel(oModel);
+				}
+			});
+			oView.byId("title").setText(this.botname);
 			var html=this.getView().byId("html");
 			 //botname = "Physical_Inventory_Count_Generate_Count_List";
-			 this.botname_url = (this.botname).replace(/ /g, "%20");
-			 var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
-			 console.log(url);
-		     var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
+			this.botname_url = (this.botname).replace(/ /g, "%20");
+			var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+			console.log(url);
+		    var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
             html.setContent(data1);
 			//alert(botname);
+			
 		},
 		onSendEmailPress: function(oEvent){
 			//var developer = sap.ui.getCore().byId(evt.getParameter('id')).getValue();
@@ -72,9 +93,9 @@ sap.ui.define([
 		onLogClick: function(oEvent){
 		var html=this.getView().byId("html");
 		var url = "http://127.0.0.1:3005/log/"+this.botname_url+"/"+this.sysname;
-		 var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
-         html.setContent(data1);
-         this.getView().byId("gb").setVisible(true);
+		var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
+        html.setContent(data1);
+        this.getView().byId("gb").setVisible(true);
 			
 		},
 		onBack: function(oEvent){
@@ -84,10 +105,6 @@ sap.ui.define([
          html.setContent(data1);
 		this.getView().byId("gb").setVisible(false);	
 		}
-		
-		
-	
-
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).

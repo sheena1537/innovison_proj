@@ -9,7 +9,7 @@
 			<Title id="masterPageTitle" text="Test automation framework" level="H2"/>
 		</semantic:titleHeading>
 		<semantic:content>
-			<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/}" noDataText="No data available"
+			<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{path:'/suite', sorter:{path:'status/_attributes/starttime', descending:'true' } }" noDataText="No data available"
 				mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}" growing="true" growingScrollToLoad="true"
 				updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
 				<infoToolbar>
@@ -25,12 +25,12 @@
 							</layoutData>
 						</SearchField>
 						<ToolbarSpacer/>
-						<Button id="sortButton" press=".onOpenViewSettings" icon="sap-icon://sort" type="Transparent"/>
+						<Button id="sortButton" press=".onSort" icon="sap-icon://sort" type="Transparent"/>
 						<Button id="filterButton" press=".onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>
 					</OverflowToolbar>
 				</headerToolbar>
 			
-				<items>
+				<items	>
 				
 				
 					<!--<ObjectListItem type="Navigation" press=".onSelectionChange" title="{_attributes/name}">-->

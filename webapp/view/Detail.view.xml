@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
     <semantic:SemanticPage id="detail_id">
         <semantic:titleHeading>
-            <Title binding='{/bots}' text="{BotName}" level="H2"/>
+            <Title id="title" level="H2"/>
         </semantic:titleHeading>
         <semantic:headerContent>
-            <ObjectAttribute binding='{/}' text="Developer: {status/_attributes/starttime}"/>
-            <ObjectAttribute binding='{/}' text="Total test cases: {total}"/>
-            <ObjectAttribute binding='{/}' text="Passed: {passed}, Failed: {failed}"/>
+        	<ObjectAttribute  text="Developer: "/>
+        	<ObjectAttribute binding='{/suite/stat/_attributes}' text="Test suite name:{name}"/>
+        	<ObjectAttribute binding='{/total/stat/0}' text="Test Category: {_text}"/>
+            <ObjectAttribute binding='{/total/stat/0}' text="Passed: {_attributes/pass}, Failed: {_attributes/fail}"/>
+            <ObjectAttribute binding='{/total/stat/1}' text="Test Category: {_text}"/>
+            <ObjectAttribute binding='{/total/stat/1}' text="Passed: {_attributes/pass}, Failed: {_attributes/fail}"/>
 				<Button text="View Log" press=".onLogClick"/>
 				<Button id="gb" text="Go back" visible="false" press=".onBack"/>
         </semantic:headerContent>
