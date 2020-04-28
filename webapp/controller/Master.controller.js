@@ -19,28 +19,7 @@ sap.ui.define([
 		 */
 		formatter: formatter,
 		onInit: function () {
-			// 			var oBotData = 
-			// {	bot: [{
-			// 		BotName: "Bot1",
-			// 		Status: "PASS",
-			// 		starttime: "start time: 23-08-2019 12:32:987"
-			// 	},
-			// 	{
-			// 	BotName: "Bot2",
-			// 		Status: "FAIL",
-			// 		starttime: "start time: 23-08-2019 12:32:987"
-			// 	},
-			// 	{
-			// 		BotName: "Bot3",
-			// 		Status: "PASS",
-			// 		starttime: "start time: 23-07-2019 12:32:987"
-			// 	}
-			// ]};
-
-			// 	var oModel = new JSONModel(oBotData);
-
-			// 	this.getView().setModel(oModel,"A");
-			// 	console.log(oModel);
+			console.log(this.createId("list"));
 			this._mViewSettingsDialogs = {};
 			this._oListFilterState = {
 				aFilter: [],
@@ -59,26 +38,22 @@ sap.ui.define([
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					console.log(data);
 					var oModel = new JSONModel();
 					oModel.setData(data.robot.suite);
 					oList.setModel(oModel);
-					console.log('oModel');
-					console.log(oModel);
 				}
 			});
 		},
 
 		onSelectionChange: function (oEvent) {
-			sap.ui.getCore().byId("container-innovision---app--myapp_fullscreen").setVisible(false);
-			sap.ui.getCore().byId("container-innovision---app--splitapp").setVisible(true);
 			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
 			var botname = evnt.getBindingContext().getProperty("_attributes/source");
 			var system_name = evnt.getBindingContext().getProperty("_attributes/name");
 			system_name = (system_name.split('-'))[0];
 			botname = (botname.split('\\')).slice(-2, -1);
-			//console.log(botname[0]);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
+			var oModel = this.getView().getModel("app");
+			oModel.setProperty("/layout", "TwoColumnsMidExpanded");
 			oR.navTo("Detail_r", {
 				"botid": botname[0],
 				"sysid": system_name
@@ -89,7 +64,6 @@ sap.ui.define([
 			// create model filter
 			var filters = [];
 			var query = evt.getParameter("query");
-			console.log("query");
 			if (query && query.length > 0) {
 				var filter = new sap.ui.model.Filter("_attributes/source", sap.ui.model.FilterOperator.Contains, query);
 				filters.push(filter);
@@ -103,7 +77,6 @@ sap.ui.define([
 		},
 
 		onSort: function (evt) {
-			console.log("filtering");
 			this.createViewSettingsDialog("com.sap.innovision.view.SortingDialog").open();
 			// var oView = this.getView();
 			// var oList = this.byId("list");
@@ -135,11 +108,9 @@ sap.ui.define([
 			return oDialog;
 		},
 		handleFilterButtonPressed: function () {
-			console.log("filtering");
 			this.createViewSettingsDialog("com.sap.innovision.view.FilterDialog").open();
 		},
 		handleFilterDialogConfirm: function (oEvent) {
-			console.log("inside filtering");
 			var mParams = oEvent.getParameters(),
 				aFilters = [];
 			// 	console.log(oEvent);
@@ -165,7 +136,7 @@ sap.ui.define([
 			// apply filter settings
 		},
 		handleSortingDialogConfirm: function (oEvent) {
-			var oView = this.getView();
+		//	var oView = this.getView();
 			var oList = this.byId("list");
 			var oBinding = oList.getBinding("items");
 

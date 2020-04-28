@@ -58,6 +58,12 @@
 				"settings": {
 					"bundleName": "com.sap.innovision.i18n.i18n"
 				}
+			},
+			"app": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "model/app.json",
+				"preload": false
 			}
 		},
 		"resources": {
@@ -73,21 +79,23 @@
 				"viewType": "XML",
 				"async": true,
 				"viewPath": "com.sap.innovision.view",
-				"clearTarget": false,
-				"controlId": "myapp_fullscreen",
-				"controlAggregation": "pages"
+				"controlId": "idAppControl",
+				"transition": "slide",
+        		"clearControlAggregation": false
 			},
 			"routes": [
 				{
 					"name": "Master_r",
 					"pattern": "",
+					"layout": "OneColumn",
 					"target": [
-						"FullScreen_t"
+						"Master_t"
 					]
 				},
 				{
 					"name": "Detail_r",
 					"pattern": "{botid} {sysid}",
+					"layout": "TwoColumnsMidExpanded",
 					"target": [
 						"Master_t", "Detail_t"
 					]
@@ -95,26 +103,16 @@
 			],
 			"targets": {
 				"Master_t": {
-					"viewType": "XML",
 					"viewName": "Master",
-					"viewLevel": 1,
 					"viewId": "master_id",
-					"controlId": "splitapp",
-					"controlAggregation": "masterPages"
+					"viewLevel": 1,
+					"controlAggregation": "beginColumnPages"
 				},
 				"Detail_t": {
-					"viewType": "XML",
 					"viewName": "Detail",
-					"viewLevel": 1,
 					"viewId": "detail_id",
-					"controlId": "splitapp",
-					"controlAggregation": "detailPages"
-				},
-				"FullScreen_t":{
-					"viewType": "XML",
-					"viewName": "Master",
 					"viewLevel": 1,
-					"viewId": "master_id"
+					 "controlAggregation": "midColumnPages"
 				}
 			}
 		}
