@@ -81,7 +81,7 @@
 				"viewPath": "com.sap.innovision.view",
 				"controlId": "idAppControl",
 				"transition": "slide",
-        		"clearControlAggregation": false
+				"clearControlAggregation": false
 			},
 			"routes": [
 				{
@@ -97,7 +97,8 @@
 					"pattern": "{botid} {sysid}",
 					"layout": "TwoColumnsMidExpanded",
 					"target": [
-						"Master_t", "Detail_t"
+						"Master_t",
+						"Detail_t"
 					]
 				}
 			],
@@ -112,8 +113,9 @@
 					"viewName": "Detail",
 					"viewId": "detail_id",
 					"viewLevel": 1,
-					 "controlAggregation": "midColumnPages"
+					"controlAggregation": "midColumnPages"
 				}
+			
 			}
 		}
 	}

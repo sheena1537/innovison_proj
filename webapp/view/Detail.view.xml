@@ -7,30 +7,25 @@
 			<Title id="title" level="H2"/>
 		</semantic:titleHeading>
 		<semantic:headerContent>
-			
 			<ObjectAttribute text="Developer: "/>
-			<ObjectAttribute binding='{/suite/stat/_attributes}' text="Test suite name:{name}"/>
-			
-			<!--<ObjectAttribute binding='{/total/stat/0}' text="Test Category: {_text}"/>-->
-			<!--   <ObjectAttribute binding='{/total/stat/0}' text="Passed: {_attributes/pass}, Failed: {_attributes/fail}"/>-->
-			<!--   <ObjectAttribute binding='{/total/stat/1}' text="Test Category: {_text}"/>-->
-			<!--   <ObjectAttribute binding='{/total/stat/1}' text="Passed: {_attributes/pass}, Failed: {_attributes/fail}"/>-->
+			<ObjectAttribute binding='{/output/robot/statistics/suite/stat}' text="Test suite name: {_text}"/>
 			<viz:Popover id="idPopOver2"></viz:Popover>
-			<viz:VizFrame id="idVizFrame" selectData="myChartClickHandler" uiConfig="{applicationSet:'fiori'}" height="300px" width="100%" vizType='donut'
-				vizProperties="{plotArea : {dataLabel: { visible : true, style:{fontSize: '1rem'}} },interaction: {selectability: { mode: 'single' },legendSelection:true}}">
+			<viz:VizFrame id="idVizFrame1" selectData="myChartClickHandler" uiConfig="{applicationSet:'fiori'}" height="300px" width="100%"
+				vizType='stacked_column'>
 				<viz:dataset>
-					<viz.data:FlattenedDataset data="{/Report}">
+					<viz.data:FlattenedDataset data="{/}">
 						<viz.data:dimensions>
-							<viz.data:DimensionDefinition name="desc" value="{desc}"/>
+							<viz.data:DimensionDefinition name="Time" value="{created}"/>
 						</viz.data:dimensions>
 						<viz.data:measures>
-							<viz.data:MeasureDefinition name="Number of test cases" value="{num}"/>
+							<viz.data:MeasureDefinition name="Pass" value="{output/robot/statistics/total/stat/1/_attributes/pass}"/>
+							<viz.data:MeasureDefinition name="Fail" value="{output/robot/statistics/total/stat/1/_attributes/fail}"/>
 						</viz.data:measures>
 					</viz.data:FlattenedDataset>
 				</viz:dataset>
 				<viz:feeds>
-					<viz.feeds:FeedItem uid="size" type="Measure" values="Number of test cases" visible="false"/>
-					<viz.feeds:FeedItem uid="color" type="Dimension" values="desc"/>
+					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Pass,Fail"/>
+					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Time"/>
 				</viz:feeds>
 			</viz:VizFrame>
 			<Toolbar class="sapContrast sapContrastPlus" width="100%" id="toolbar">
@@ -38,6 +33,9 @@
 					<Button text="View Log" press=".onLogClick"/>
 					<ToolbarSpacer id="spacer01_1585628234749"/>
 					<Button id="gb" text="Go back" visible="false" press=".onBack"/>
+					<layout:HorizontalLayout>
+						<Button id="openMenu" text="View Previous Reports" press="handlePressOpenMenu"/>
+					</layout:HorizontalLayout>
 				</content>
 			</Toolbar>
 			<!--<Button text="View Log" press=".onLogClick"/>-->

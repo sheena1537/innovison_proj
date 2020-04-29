@@ -1,7 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/core/Fragment",
+	"sap/ui/core/Popup"
+], function (Controller,JSONModel,Fragment,Popup) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Detail", {
@@ -13,14 +15,16 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			//sap.ui.getCore().byId("container-innovision---app--myapp_fullscreen").setVisible(false);
-			console.log("detail");
+	    	this.byId("openMenu").attachBrowserEvent("tab keyup", function(oEvent){
+				this._bKeyboard = oEvent.type === "keyup";
+			}, this);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			oR.getRoute("Detail_r").attachMatched(this._onAttachMatched, this);
-			var oView = this.getView();
+			var url ="http://localhost:3005/output/Intelligent%20Production%20Order%20Conversion/OP_1909/Mon,%2027%20Apr%202020%2006:12:36%20GMT/pass";
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "http://127.0.0.1:3005/output",
+				url: url,
 				cors: true,
 				secure: true,
 				async: false,
@@ -28,109 +32,110 @@ sap.ui.define([
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					//console.log(data);
-					//console.log(data.suite[0].suite);
-					var oModel = new JSONModel();
-					oModel.setData(data.robot.suite.suite);
-					oView.setModel(oModel);
-					//	console.log(oModel);
-				}
-
-			});
-			// sap.ui.getCore().byId("container-innovision---app--splitapp").setBusy(false);
-
+				
+				console.log("latest");
+				console.log(data);
+				
+				
+			
+				}});
 		},
-		_onAttachMatched: function (oEvent) {
+		_onAttachMatched: function(oEvent){
 			this.oArg = oEvent.getParameter("arguments");
 			this.botname = this.oArg.botid;
 			this.sysname = this.oArg.sysid;
-			var t = this;
 			var oView = this.getView();
-
-			var url1 = "http://127.0.0.1:3005/output/" + this.botname + "/" + this.sysname;
-			$.ajax({
+			oView.byId("title").setText(this.botname);
+		    	var url2 = "http://127.0.0.1:3005/prevdata/"+this.botname+"/"+this.sysname;
+				$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: url1,
+				url: url2,
 				cors: true,
 				secure: true,
+				async: false,
 				headers: {
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-					var oModel = new JSONModel();
-					var data1 = data.robot.statistics;
-					oModel.setData(data1);
-					oView.setModel(oModel);
-					var pass_no = data1.total.stat[1]._attributes.pass;
-					var fail_no = data1.total.stat[1]._attributes.fail;
-					var model = new sap.ui.model.json.JSONModel();
-					model.setData({
-						Report: [{
-							desc: "pass: " + pass_no,
-							num: pass_no
-						}, {
-							desc: "fail: " + fail_no,
-							num: fail_no
-						}]
-					});
-					var oVizFrame = oView.byId("idVizFrame");
-					var oVizPop = oView.byId("idPopOver2");
-					//""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-					oVizFrame.setVizProperties({
-
+				var	oModel1 = new JSONModel();
+				oModel1.setData(data);
+				console.log("data");
+				console.log(data);
+	            //oVizFrame1.setModel(oModel1);
+	            oView.setModel(oModel1);
+				}});
+			var	oVizFrame1 = oView.byId("idVizFrame1");
+	            var oVizPop = oView.byId("idPopOver2");
+	            oVizFrame1.setVizProperties({
 						title: {
 							visible: true,
 							text: "Test run result"
 						},
-
 						plotArea: {
 
 							colorPalette: ['#44d46a', '#fa6964']
 						}
-
 					});
-					oVizPop.connect(oVizFrame.getVizUid());
-
-					//""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-					oVizFrame.setModel(model);
-				}
-			});
-			oView.byId("title").setText(this.botname);
-			var html = this.getView().byId("html");
+	        oVizPop.connect(oVizFrame1.getVizUid());
+			var html=this.getView().byId("html");
 			this.botname_url = (this.botname).replace(/ /g, "%20");
-			var url = "http://127.0.0.1:3005/report/" + this.botname_url + "/" + this.sysname;
-			var data1 = "<iframe src='" + url + "' height='800' width='100%'/>";
-			html.setContent(data1);
-			// sap.ui.getCore().byId("container-innovision---app--splitapp").setBusy(false);
-
+			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
+            html.setContent(data1);
 		},
-		onSendEmailPress: function (oEvent) {
+		onSendEmailPress: function(oEvent){
 			//var developer = sap.ui.getCore().byId(evt.getParameter('id')).getValue();
-			sap.m.URLHelper.triggerEmail("developer;s2", "Info Request");
+			var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+		    var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
+			sap.m.URLHelper.triggerEmail(" ", "Info Request",url);
+			},
+		onLogClick: function(oEvent){
+		var html=this.getView().byId("html");
+		this.lurl = (this.rurl).replace("report","log");
+		//var url = "http://127.0.0.1:3005/log/"+this.botname_url+"/"+this.sysname;
+		var data1 = "<iframe src='"+this.lurl+"' height='800' width='100%'/>";
+        html.setContent(data1);
+        this.getView().byId("gb").setVisible(true);
+        this.getView().byId("openMenu").setVisible(false);
+			
 		},
-
-		onLogClick: function (oEvent) {
-			var html = this.getView().byId("html");
-			var url = "http://127.0.0.1:3005/log/" + this.botname_url + "/" + this.sysname;
-			var data1 = "<iframe src='" + url + "' height='800' width='100%'/>";
-			html.setContent(data1);
-			this.getView().byId("gb").setVisible(true);
-
+		onBack: function(oEvent){
+			var html=this.getView().byId("html");
+		//var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+		this.rurl = (this.lurl).replace("log","report");
+		 var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
+         html.setContent(data1);
+		this.getView().byId("gb").setVisible(false);
+		this.getView().byId("openMenu").setVisible(true);
 		},
-		onBack: function (oEvent) {
-			var html = this.getView().byId("html");
-			var url = "http://127.0.0.1:3005/report/" + this.botname_url + "/" + this.sysname;
-			var data1 = "<iframe src='" + url + "' height='800' width='100%'/>";
-			html.setContent(data1);
-			this.getView().byId("gb").setVisible(false);
+		handlePressOpenMenu: function(oEvent) {
+			var oButton = oEvent.getSource();
+			// create menu only once
+			if (!this._menu) {
+				Fragment.load({
+					name: "com.sap.innovision.view.menu",
+					controller: this
+				}).then(function(oMenu){
+					this._menu = oMenu;
+					this.getView().addDependent(this._menu);
+					this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
+				}.bind(this));
+			} else {
+				this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
+			}
 		},
-		myChartClickHandler: function (oEvent) {
-			var clickedData = oEvent.getParameter("data");
-			console.log(clickedData);
+			handleMenuItemPress: function(oEvent) {
+			var oItem = oEvent.getParameter("item");
+			var	sMessage = "'" + oItem.getText() + "' pressed";
+			var time =  oItem.getText();
+			var time_url = (time).replace(/ /g, "%20");
+			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname+"/"+time_url;
+			var html=this.getView().byId("html");
+		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
+            html.setContent(data1);
 		},
-		toggleFullScreen: function () {
+			toggleFullScreen: function () {
 			var oModel = this.getView().getModel("app");
 			var bFullScreen = oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
 			oModel.setProperty("/actionButtonsInfo/midColumn/fullScreen", !bFullScreen);
@@ -155,6 +160,7 @@ sap.ui.define([
 			console.log("here master");
 			this.getOwnerComponent().getRouter().navTo("Master_r", {}, true);
 		}
+
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
