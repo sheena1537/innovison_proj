@@ -5,9 +5,12 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/Sorter",
 	"sap/ui/model/FilterOperator",
-	'sap/ui/Device'
+	"sap/ui/Device",
+	"sap/ui/core/Fragment",
+	"sap/ui/core/Popup"
+	
 
-], function (Controller, JSONModel, formatter, Filter, FilterOperator, Sorter, Device) {
+], function (Controller, JSONModel, formatter, Filter, FilterOperator, Sorter, Device,Fragment,Popup) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Master", {
@@ -19,7 +22,10 @@ sap.ui.define([
 		 */
 		formatter: formatter,
 		onInit: function () {
-			console.log(this.createId("list"));
+			//console.log(this.createId("list"));
+			this.byId("favbtn").attachBrowserEvent("tab keyup", function(oEvent){
+				this._bKeyboard = oEvent.type === "keyup";
+			}, this);
 			this._mViewSettingsDialogs = {};
 			this._oListFilterState = {
 				aFilter: [],
@@ -49,8 +55,8 @@ sap.ui.define([
 			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
 			var botname = evnt.getBindingContext().getProperty("_attributes/source");
 			var system_name = evnt.getBindingContext().getProperty("_attributes/name");
-			system_name = (system_name.split('-'))[0];
-			botname = (botname.split('\\')).slice(-2, -1);
+			system_name = ((system_name).split('-'))[0];
+			botname = ((botname).split('\\')).slice(-2, -1);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			var oModel = this.getView().getModel("app");
 			oModel.setProperty("/layout", "TwoColumnsMidExpanded");
@@ -164,8 +170,69 @@ sap.ui.define([
 
 			var oModel = this.getView().getModel();
 			oModel.refresh();
+		},
+		showFavouritesMenu: function(oEvent) {
+			var oButton = oEvent.getSource();
+
+			// create menu only once
+			if (!this._menu) {
+				Fragment.load({
+					name: "com.sap.innovision.view.favourites",
+					controller: this
+				}).then(function(oMenu){
+					this._menu = oMenu;
+					this.getView().addDependent(this._menu);
+					this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
+				}.bind(this));
+			} else {
+				this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
+			}
+			var menu = sap.ui.getCore().byId("fav");
+		    console.log(menu);
+				
+			$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: "http://localhost:3001/output/i518733",
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					var Jmodel = new JSONModel();
+					Jmodel.setData(data);
+					console.log(Jmodel);
+					menu.setModel(Jmodel);
+				}
+			});
+			
+		},
+		
+		handleFavItemPress : function(oEvent){
+			
+				var oItem = oEvent.getParameter("item");
+				var parameters = (oItem.getText()).split(",");
+				var botname = parameters[0];
+				var sysname = parameters[1];
+				console.log(botname,sysname);
+				var oR = sap.ui.core.UIComponent.getRouterFor(this);
+				var oModel = this.getView().getModel("app");
+				oModel.setProperty("/layout", "TwoColumnsMidExpanded");
+				oR.navTo("Detail_r", {
+					"botid": botname,
+					"sysid": sysname
+				});
+			
+			
+			
+			
 		}
 
+		
+		
+	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).

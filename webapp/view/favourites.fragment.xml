@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:u="sap.ui.unified">
+	<u:Menu id="fav"
+			itemSelect="handleFavItemPress"
+                 items="{/favourites}"      >
+            <u:items>
+			<u:MenuItem
+				text="{}"/>
+            </u:items>
+        </u:Menu>
+</core:FragmentDefinition>

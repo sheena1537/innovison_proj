@@ -20,6 +20,12 @@ sap.ui.define([], function () {
 			return chatbot_name;
 		// return sStatus;
 		},
+		
+		info: function(name){
+		if(name === "")
+		return "none";
+		return name;
+		},
 	
 	
 	

@@ -28,13 +28,84 @@
 					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Time"/>
 				</viz:feeds>
 			</viz:VizFrame>
+			<VBox id="v1">
+				<Button icon="sap-icon://decline" press=".onCloseTable" tooltip="close table"/>
+				<Table noDataText="Drop column list items here and columns in the area above" id="t1" items="{/}">
+					<items>
+						<ColumnListItem xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" type="Active" id="item0_1586091211617"
+							press="viewDetails">
+							<cells>
+								<Text text="{_attributes/id}" id="text0"/>
+								<Text text="{_attributes/name}" id="text1"/>
+								<!--<Text text="{status/_attributes/starttime}" id="text2"/>-->
+								<Text text="{ parts:[ {path:'status/_attributes/starttime'}], formatter: '.formatter.status' }" id="text2"/>
+								<Text text="{status/_attributes/endtime}" id="text3"/>
+								<Text text="{status/_attributes/critical}" id="text4"/>
+								<Text text="{ parts:[ {path:'status/_text'}], formatter: '.formatter.info' }" id="text5"/>
+								<!--<Text text="{status/_text}" id="text5"/>-->
+								<!--<Text text="{path:'Reqdate', type:'sap.ui.model.type.Date', formatOptions: {pattern: 'dd MMMM, yyyy'  } }" id="cid"/>-->
+								<!--<Text text="{path:'Moddate', type:'sap.ui.model.type.Date', formatOptions: {pattern: 'dd MMMM, yyyy'  } }" id="text2"/>-->
+								<!--<ObjectStatus-->
+								<!--	text="{Status}"-->
+								<!--	icon ="sap-icon://circle-task-2"-->
+								<!--	state="{-->
+								<!--		path: 'Status',-->
+								<!--		formatter: '.formatter.status'-->
+								<!--	}" />-->
+								<!--<core:Icon src="sap-icon://feeder-arrow" size="0.8em" id="icon0"/>-->
+							</cells>
+						</ColumnListItem>
+					</items>
+					<columns>
+						<Column id="column0">
+							<header>
+								<Label text="TEST CASE ID" id="label0_1586091211617"/>
+							</header>
+						</Column>
+						<Column id="column1">
+							<header>
+								<Label text="TEST CASE NAME" id="label1"/>
+							</header>
+						</Column>
+						<Column id="column2">
+							<header>
+								<Label text="START TIME" id="label2"/>
+							</header>
+						</Column>
+						<Column id="column3">
+							<header>
+								<Label text="END TIME" id="label3"/>
+							</header>
+						</Column>
+						<Column id="column4">
+							<header>
+								<Label text="CRITICAL" id="label4"/>
+							</header>
+						</Column>
+						<Column id="column5">
+							<header>
+								<Label text="MESSAGE" id="label5"/>
+							</header>
+						</Column>
+					</columns>
+				</Table>
+			</VBox>
 			<Toolbar class="sapContrast sapContrastPlus" width="100%" id="toolbar">
 				<content>
 					<Button text="View Log" press=".onLogClick"/>
 					<ToolbarSpacer id="spacer01_1585628234749"/>
 					<Button id="gb" text="Go back" visible="false" press=".onBack"/>
+					<MenuButton text="View Previous Reports" buttonMode="Split" useDefaultActionOnly="true">
+						<menu>
+							<Menu itemSelected="handleMenuItemPress" items="{/}">
+								<MenuItem text="{created}" />
+								
+							</Menu>
+						</menu>
+					</MenuButton>
 					<layout:HorizontalLayout>
-						<Button id="openMenu" text="View Previous Reports" press="handlePressOpenMenu"/>
+						<!--<Button id="openMenu" text="View Previous Reports" press="handlePressOpenMenu"/>-->
+						<Button id="fav" icon="sap-icon://add-favorite" press="addtofav" tooltip="Add to favourites"/>
 					</layout:HorizontalLayout>
 				</content>
 			</Toolbar>

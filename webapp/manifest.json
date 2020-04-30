@@ -100,6 +100,16 @@
 						"Master_t",
 						"Detail_t"
 					]
+				},
+					{
+					"name": "Detail2_r",
+					"pattern": "{botid} {sysid} {timestamp} {criteria}",
+					"layout": "ThreeColumnsMidExpanded",
+					"target": [
+						"Master_t",
+						"Detail_t",
+						"Detail2_t"
+					]
 				}
 			],
 			"targets": {
@@ -114,7 +124,14 @@
 					"viewId": "detail_id",
 					"viewLevel": 1,
 					"controlAggregation": "midColumnPages"
+				},
+				"Detail2_t": {
+					"viewName": "detail2",
+					"viewId": "detail2_id",
+					"viewLevel": 1,
+					"controlAggregation": "endColumnPages"
 				}
+				
 			
 			}
 		}

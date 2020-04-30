@@ -27,10 +27,11 @@
 						<ToolbarSpacer/>
 						<Button id="sortButton" press=".onSort" icon="sap-icon://sort" type="Transparent"/>
 						<Button id="filterButton" press=".handleFilterButtonPressed" icon="sap-icon://filter" type="Transparent"/>
+						<Button id="favbtn" press=".showFavouritesMenu" icon="sap-icon://favorite-list" type="Transparent" tooltip="View favourites"/>
+					   
 					</OverflowToolbar>
 				</headerToolbar>
-			
-				<items	>
+				<items>
 				
 				
 					<!--<ObjectListItem type="Navigation" press=".onSelectionChange" title="{_attributes/name}">-->
@@ -41,10 +42,13 @@
 								state="{ path: 'status/_attributes/status', formatter: '.formatter.status1' }"/>
 						</firstStatus>
 						<attributes>
+							<!--<Button id="favbtn1" press=".addTofav" icon="sap-icon://favorite-list" type="Transparent" tooltip="View favourites"/>-->
 						<!--<ObjectAttribute  text="status: {  path: 'status/_attributes/status' }"/>-->
 								<ObjectAttribute text="Last run: { parts:[ {path:'status/_attributes/starttime'}], formatter: '.formatter.status' }"/>
 							    <ObjectAttribute text="system: { parts:[ {path:'_attributes/name'}], formatter: '.formatter.system' }"/>
+							    
 						</attributes>
+					
 					</ObjectListItem>
 				</items>
 			</List>

@@ -2,8 +2,13 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/Fragment",
-	"sap/ui/core/Popup"
-], function (Controller,JSONModel,Fragment,Popup) {
+	"../model/formatter",
+	"sap/ui/core/Popup",
+	"sap/m/MessageToast",
+	"sap/m/Dialog",
+	"sap/m/Button",
+	"sap/m/Text"
+], function (Controller,JSONModel,Fragment,Popup,formatter,MessageToast,Dialog,Button,Text) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Detail", {
@@ -13,32 +18,11 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf com.sap.innovision.view.Detail
 		 */
+		
 		onInit: function () {
-			//sap.ui.getCore().byId("container-innovision---app--myapp_fullscreen").setVisible(false);
-	    	this.byId("openMenu").attachBrowserEvent("tab keyup", function(oEvent){
-				this._bKeyboard = oEvent.type === "keyup";
-			}, this);
+			this.getView().byId("v1").setVisible(false);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			oR.getRoute("Detail_r").attachMatched(this._onAttachMatched, this);
-			var url ="http://localhost:3005/output/Intelligent%20Production%20Order%20Conversion/OP_1909/Mon,%2027%20Apr%202020%2006:12:36%20GMT/pass";
-			$.ajax({
-				type: "GET",
-				dataType: "json",
-				url: url,
-				cors: true,
-				secure: true,
-				async: false,
-				headers: {
-					'Access-Control-Allow-Origin': '*'
-				},
-				success: function (data, textStatus, jqXHR) {
-				
-				console.log("latest");
-				console.log(data);
-				
-				
-			
-				}});
 		},
 		_onAttachMatched: function(oEvent){
 			this.oArg = oEvent.getParameter("arguments");
@@ -83,7 +67,30 @@ sap.ui.define([
 			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
 		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
             html.setContent(data1);
-		},
+            
+            
+            this.fav = this.botname_url+","+this.sysname;
+            //var fav_url = "http://localhost:3001/output/i518733/bot1";
+            var fav_url = "http://localhost:3001/output/i518733/"+this.fav;
+            	$.ajax({
+				type: "GET",
+				//dataType: "json",
+				url: fav_url,
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					var fav_btn = oView.byId("fav");
+		            if(data === "not found")
+		            fav_btn.setIcon("sap-icon://add-favorite");
+		            else 
+		            fav_btn.setIcon("sap-icon://favorite");
+		            
+				}});
+				},
 		onSendEmailPress: function(oEvent){
 			//var developer = sap.ui.getCore().byId(evt.getParameter('id')).getValue();
 			var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
@@ -97,7 +104,7 @@ sap.ui.define([
 		var data1 = "<iframe src='"+this.lurl+"' height='800' width='100%'/>";
         html.setContent(data1);
         this.getView().byId("gb").setVisible(true);
-        this.getView().byId("openMenu").setVisible(false);
+        //this.getView().byId("openMenu").setVisible(false);
 			
 		},
 		onBack: function(oEvent){
@@ -109,22 +116,7 @@ sap.ui.define([
 		this.getView().byId("gb").setVisible(false);
 		this.getView().byId("openMenu").setVisible(true);
 		},
-		handlePressOpenMenu: function(oEvent) {
-			var oButton = oEvent.getSource();
-			// create menu only once
-			if (!this._menu) {
-				Fragment.load({
-					name: "com.sap.innovision.view.menu",
-					controller: this
-				}).then(function(oMenu){
-					this._menu = oMenu;
-					this.getView().addDependent(this._menu);
-					this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
-				}.bind(this));
-			} else {
-				this._menu.open(this._bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton);
-			}
-		},
+
 			handleMenuItemPress: function(oEvent) {
 			var oItem = oEvent.getParameter("item");
 			var	sMessage = "'" + oItem.getText() + "' pressed";
@@ -159,6 +151,109 @@ sap.ui.define([
 			
 			console.log("here master");
 			this.getOwnerComponent().getRouter().navTo("Master_r", {}, true);
+		},
+		myChartClickHandler: function(oEvent){
+			//console.log(oEvent.getParameters());
+			var content = oEvent.getParameters();
+			var timestamp = content.data[0].data.Time;
+			var criteria = (content.data[0].data.measureNames).toUpperCase();
+			var oView=this.getView();
+			oView.byId("v1").setVisible(true);
+				//var url ="http://localhost:3005/output/Intelligent%20Production%20Order%20Conversion/OP_1909/Mon,%2027%20Apr%202020%2006:12:36%20GMT/FAIL";
+		    var time_url = (timestamp).replace(/ /g, "%20");
+			var url = "http://127.0.0.1:3005/output/"+this.botname_url+"/"+this.sysname+"/"+time_url+"/"+criteria;
+			$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: url,
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+				var Jmod = new JSONModel(data);
+				oView.byId("t1").setModel(Jmod);
+				}});
+			//alert("clicked");
+		},
+		onCloseTable:function(oEvent){
+			this.getView().byId("v1").setVisible(false);
+		},
+		addtofav:function(oEvent){
+		var oView = this.getView();
+		var fav_btn = oView.byId("fav");
+		var fav_icon = fav_btn.getIcon();
+		
+		
+		
+		if(fav_icon === "sap-icon://favorite")
+		{   var t =this;
+			var oDialog = new Dialog({
+				title: "Confirm",
+				type: "Message",
+				content: new Text({ text: "Remove from favourites?" }),
+				beginButton: new Button({
+					type: Button.Emphasized,
+					text: "Remove",
+					press: function () {
+						//MessageToast.show('Submit pressed!');
+		     	var url = "http://127.0.0.1:3001/addfav/i518733/"+t.fav+"/remove";
+		     	
+		     	console.log(url);
+		     	$.ajax({
+				type: "PUT",
+				//dataType: "json",
+				url: url,
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					MessageToast.show("Removed from favourites");
+					//fav_btn.setEnabled(false);
+					fav_btn.setIcon("sap-icon://add-favorite");
+				}});
+						
+						oDialog.close();
+					}
+				}),
+				endButton: new Button({
+					text: "Cancel",
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function () {
+					oDialog.destroy();
+				}
+			});
+
+			oDialog.open();
+		}
+		
+		else
+		{
+		var url = "http://127.0.0.1:3001/addfav/i518733/"+this.fav+"/add";
+			$.ajax({
+				type: "PUT",
+				//dataType: "json",
+				url: url,
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+					MessageToast.show("Added to favourites");
+					fav_btn.setIcon("sap-icon://favorite");
+					
+				}});
+		}
 		}
 
 		/**
