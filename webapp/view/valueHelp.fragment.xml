@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form">
+<Dialog class="formstyl">
+		<f:SimpleForm editable="true" layout="ResponsiveGridLayout" title="Travel Details" labelSpanL="2" labelSpanM="2" emptySpanL="0"
+			emptySpanM="0" columnsL="1" columnsM="1" width="700px">
+			<f:content>
+			<Text text="AJHs"/>
+				
+			</f:content>
+		</f:SimpleForm>
+	</Dialog>
+</core:FragmentDefinition>

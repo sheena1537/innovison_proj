@@ -1,13 +1,13 @@
 <core:FragmentDefinition
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
-	<ViewSettingsDialog
+	<ViewSettingsDialog 
 		confirm="handleFilterDialogConfirm">
-		<filterItems>
+		<filterItems items="{/}" id="filt1">
 			<ViewSettingsFilterItem
 				text="STATUS"
 				key="STATUS"
-				multiSelect="false" id="tc">
+				multiSelect="true" id="tc">
 				<items>
 					<ViewSettingsItem text="PASS" key="PASS" />
 					<ViewSettingsItem text="FAIL" key="FAIL" />
@@ -17,10 +17,46 @@
 			<ViewSettingsFilterItem
 				text="SYSTEM"
 				key="SYSTEM"
-				multiSelect="false" id="tc1">
+				multiSelect="true" id="tc1">
 				<items>
 					<ViewSettingsItem text="CE" key="CE" />
 					<ViewSettingsItem text="OP_1909" key="OP_1909" />
+					<ViewSettingsItem text="OP_1809" key="OP_1809" />
+					<ViewSettingsItem text="OC7_CU" key="OC7_CU"/>
+					<ViewSettingsItem text="OC7_BU" key="OC7_BU"/>
+				</items>
+			</ViewSettingsFilterItem>
+				<ViewSettingsFilterItem
+				text="AREA"
+				key="AREA"
+				multiSelect="true" id="tc2">
+				<items>
+					<ViewSettingsItem text="MANUFACTURING" key="MANUFACTURING" />
+					<!--<ViewSettingsItem text="{botdetails/detail/0/area}" key="{botdetails/detail/0/area}" />-->
+				</items>
+			</ViewSettingsFilterItem>
+				<ViewSettingsFilterItem
+				text="DEVELOPER"
+				key="DEVELOPER"
+				multiSelect="true" id="tc3">
+				<items>
+					<ViewSettingsItem text="PANDEY, DEVANSHI" key="PANDEY, DEVANSHI" />
+					<ViewSettingsItem text="OBILISETTY, KIRAN KUMAR" key="OBILISETTY, KIRAN KUMAR" />
+					<ViewSettingsItem text="MAJI, KOUSIK" key="MAJI, KOUSIK" />
+					<ViewSettingsItem text="SRIVASTAVA, SURYAM" key="SRIVASTAVA, SURYAM" />
+					<!--<ViewSettingsItem text="{botdetails/detail/0/developer}" key="{botdetails/detail/0/developer}" />-->
+				</items>
+			</ViewSettingsFilterItem>
+				
+				<ViewSettingsFilterItem
+				text="SPOC"
+				key="SPOC"
+				multiSelect="true" id="tc4">
+				<items>
+					<ViewSettingsItem text="PANDEY, DEVANSHI" key="PANDEY, DEVANSHI" />
+					<ViewSettingsItem text="OBILISETTY, KIRAN KUMAR" key="OBILISETTY, KIRAN KUMAR" />
+					<ViewSettingsItem text="MAJI, KOUSIK" key="MAJI, KOUSIK" />
+					<ViewSettingsItem text="SRIVASTAVA, SURYAM" key="SRIVASTAVA, SURYAM" />
 				</items>
 			</ViewSettingsFilterItem>
 		</filterItems>

@@ -36,7 +36,7 @@ sap.ui.define([
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "http://127.0.0.1:3005/output",
+				url: "http://127.0.0.1:3005/output1",
 				cors: true,
 				secure: true,
 				async: false,
@@ -45,23 +45,31 @@ sap.ui.define([
 				},
 				success: function (data, textStatus, jqXHR) {
 					var oModel = new JSONModel();
-					oModel.setData(data.robot.suite);
+					//oModel.setData(data.robot.suite);
+					oModel.setData(data);
+					console.log(oModel);
 					oList.setModel(oModel);
+					//sap.ui.getCore().byId("filt1").setModel(oModel);
+					sap.ui.getCore().byId("filt1").setModel(oModel);
+					
 				}
 			});
+			
+			
 		},
 
 		onSelectionChange: function (oEvent) {
 			var evnt = (oEvent.getParameter("listItem") || oEvent.getSource());
-			var botname = evnt.getBindingContext().getProperty("_attributes/source");
-			var system_name = evnt.getBindingContext().getProperty("_attributes/name");
+			var botname = evnt.getBindingContext().getProperty("botdetails/detail/0/botName");
+			var system_name = evnt.getBindingContext().getProperty("maindetails/0/output/robot/statistics/suite/stat/_text");
 			system_name = ((system_name).split('-'))[0];
-			botname = ((botname).split('\\')).slice(-2, -1);
+			//alert(system_name);
+		
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			var oModel = this.getView().getModel("app");
 			oModel.setProperty("/layout", "TwoColumnsMidExpanded");
 			oR.navTo("Detail_r", {
-				"botid": botname[0],
+				"botid": botname,
 				"sysid": system_name
 			});
 		},
@@ -71,7 +79,7 @@ sap.ui.define([
 			var filters = [];
 			var query = evt.getParameter("query");
 			if (query && query.length > 0) {
-				var filter = new sap.ui.model.Filter("_attributes/source", sap.ui.model.FilterOperator.Contains, query);
+				var filter = new sap.ui.model.Filter("botdetails/detail/0/botName", sap.ui.model.FilterOperator.Contains, query);
 				filters.push(filter);
 			}
 
@@ -116,6 +124,19 @@ sap.ui.define([
 		handleFilterButtonPressed: function () {
 			this.createViewSettingsDialog("com.sap.innovision.view.FilterDialog").open();
 		},
+		// handleFilterButtonPressed: function (oEvent3) {
+		// 	if (!this.newCreate) {
+		// 		this.newCreate = sap.ui.xmlfragment("com.sap.innovision.view.FilterDialog", this);
+		// 	}
+		// 	this.newCreate.open();
+		// },
+		// onValueHelpRequested:function(oEvent){
+		// 		if (!this.newCreate1) {
+		// 		this.newCreate1 = sap.ui.xmlfragment("com.sap.innovision.view.valueHelp", this);
+		// 	}
+		// 	this.newCreate1.open();
+			
+		// },
 		handleFilterDialogConfirm: function (oEvent) {
 			var mParams = oEvent.getParameters(),
 				aFilters = [];
@@ -128,9 +149,18 @@ sap.ui.define([
 					sPath = aSplit,
 					oFilter;
 				if (ParentKey === "STATUS")
-					oFilter = new sap.ui.model.Filter("status/_attributes/status", sap.ui.model.FilterOperator.Contains, sPath);
+					oFilter = new sap.ui.model.Filter("maindetails/0/output/robot/suite/status/_attributes/status", sap.ui.model.FilterOperator.Contains, sPath);
 				else if (ParentKey === "SYSTEM")
-					oFilter = new sap.ui.model.Filter("_attributes/name", sap.ui.model.FilterOperator.Contains, sPath);
+					oFilter = new sap.ui.model.Filter("maindetails/0/output/robot/statistics/suite/stat/_text", sap.ui.model.FilterOperator.Contains, sPath);
+				else if (ParentKey === "AREA")
+					oFilter = new sap.ui.model.Filter("botdetails/detail/0/area", sap.ui.model.FilterOperator.Contains, sPath);
+		       else if (ParentKey === "DEVELOPER")
+					oFilter = new sap.ui.model.Filter("botdetails/detail/0/developer", sap.ui.model.FilterOperator.Contains, sPath);
+			else if (ParentKey === "SPOC")
+					oFilter = new sap.ui.model.Filter("botdetails/detail/0/maintainer", sap.ui.model.FilterOperator.Contains, sPath);
+			
+			
+			
 				aFilters.push(oFilter);
 			});
 
@@ -156,7 +186,7 @@ sap.ui.define([
 				var aSplit = oItem.getKey(),
 					sOrder = aSplit;
 				if (ParentKey === "STARTTIME") {
-					var SORTKEY = "status/_attributes/starttime";
+					var SORTKEY = "maindetails/0/output/robot/suite/status/_attributes/starttime";
 					var DESCENDING;
 					if(sOrder==="ACSENDING")
 						DESCENDING=false;
@@ -224,12 +254,10 @@ sap.ui.define([
 					"botid": botname,
 					"sysid": sysname
 				});
-			
-			
-			
-			
 		}
-
+		
+		
+		
 		
 		
 	

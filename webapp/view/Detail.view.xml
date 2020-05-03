@@ -7,15 +7,23 @@
 			<Title id="title" level="H2"/>
 		</semantic:titleHeading>
 		<semantic:headerContent>
-			<ObjectAttribute text="Developer: "/>
-			<ObjectAttribute binding='{/output/robot/statistics/suite/stat}' text="Test suite name: {_text}"/>
+			<!--<VBox id="vb1" items="{/detail}" >-->
+			<!--	<items>-->
+			<!--<ObjectAttribute  text="Area: {area}"/>-->
+			<!--<ObjectAttribute  text="Developer: {developer} "/>-->
+			<!--<ObjectAttribute  text="Maintainer: {maintainer}"/>-->
+			<!--</items>-->
+			<!--</VBox>-->
+			<ObjectAttribute id="a1"/>
+			<ObjectAttribute id="d1"/>
+			<ObjectAttribute id="m1" />
 			<viz:Popover id="idPopOver2"></viz:Popover>
-			<viz:VizFrame id="idVizFrame1" selectData="myChartClickHandler" uiConfig="{applicationSet:'fiori'}" height="300px" width="100%"
+			<viz:VizFrame id="idVizFrame1" selectData="myChartClickHandler" uiConfig="{applicationSet:'fiori'}" height="350px" width="100%"
 				vizType='stacked_column'>
 				<viz:dataset>
 					<viz.data:FlattenedDataset data="{/}">
 						<viz.data:dimensions>
-							<viz.data:DimensionDefinition name="Time" value="{created}"/>
+							<viz.data:DimensionDefinition name="Time" value="{created}" hideWhenOverlap="false"/>
 						</viz.data:dimensions>
 						<viz.data:measures>
 							<viz.data:MeasureDefinition name="Pass" value="{output/robot/statistics/total/stat/1/_attributes/pass}"/>
@@ -25,7 +33,7 @@
 				</viz:dataset>
 				<viz:feeds>
 					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Pass,Fail"/>
-					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Time"/>
+					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Time" height="700px" hideWhenOverlap="false"/>
 				</viz:feeds>
 			</viz:VizFrame>
 			<VBox id="v1">
@@ -37,22 +45,10 @@
 							<cells>
 								<Text text="{_attributes/id}" id="text0"/>
 								<Text text="{_attributes/name}" id="text1"/>
-								<!--<Text text="{status/_attributes/starttime}" id="text2"/>-->
-								<Text text="{ parts:[ {path:'status/_attributes/starttime'}], formatter: '.formatter.status' }" id="text2"/>
-								<Text text="{status/_attributes/endtime}" id="text3"/>
+								<Text text="{path:'status/_attributes/starttime', formatter: '.formatter.status' }" id="text2"/>
+								<Text text="{path:'status/_attributes/endtime', formatter: '.formatter.status' }" id="text3"/>
 								<Text text="{status/_attributes/critical}" id="text4"/>
-								<Text text="{ parts:[ {path:'status/_text'}], formatter: '.formatter.info' }" id="text5"/>
-								<!--<Text text="{status/_text}" id="text5"/>-->
-								<!--<Text text="{path:'Reqdate', type:'sap.ui.model.type.Date', formatOptions: {pattern: 'dd MMMM, yyyy'  } }" id="cid"/>-->
-								<!--<Text text="{path:'Moddate', type:'sap.ui.model.type.Date', formatOptions: {pattern: 'dd MMMM, yyyy'  } }" id="text2"/>-->
-								<!--<ObjectStatus-->
-								<!--	text="{Status}"-->
-								<!--	icon ="sap-icon://circle-task-2"-->
-								<!--	state="{-->
-								<!--		path: 'Status',-->
-								<!--		formatter: '.formatter.status'-->
-								<!--	}" />-->
-								<!--<core:Icon src="sap-icon://feeder-arrow" size="0.8em" id="icon0"/>-->
+								<Text text="{path:'status/_text', formatter: '.formatter.info' }" id="text5"/>
 							</cells>
 						</ColumnListItem>
 					</items>
@@ -95,7 +91,7 @@
 					<Button text="View Log" press=".onLogClick"/>
 					<ToolbarSpacer id="spacer01_1585628234749"/>
 					<Button id="gb" text="Go back" visible="false" press=".onBack"/>
-					<MenuButton text="View Previous Reports" buttonMode="Split" useDefaultActionOnly="true">
+					<MenuButton text="Previous Reports" buttonMode="Split" useDefaultActionOnly="true">
 						<menu>
 							<Menu itemSelected="handleMenuItemPress" items="{/}">
 								<MenuItem text="{created}" />
@@ -105,7 +101,7 @@
 					</MenuButton>
 					<layout:HorizontalLayout>
 						<!--<Button id="openMenu" text="View Previous Reports" press="handlePressOpenMenu"/>-->
-						<Button id="fav" icon="sap-icon://add-favorite" press="addtofav" tooltip="Add to favourites"/>
+						<Button id="fav" icon="sap-icon://add-favorite" press="addtofav"/>
 					</layout:HorizontalLayout>
 				</content>
 			</Toolbar>

@@ -8,7 +8,7 @@ sap.ui.define([
 	"sap/m/Dialog",
 	"sap/m/Button",
 	"sap/m/Text"
-], function (Controller,JSONModel,Fragment,Popup,formatter,MessageToast,Dialog,Button,Text) {
+], function (Controller,JSONModel,Fragment,formatter,Popup,MessageToast,Dialog,Button,Text) {
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Detail", {
@@ -18,7 +18,7 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf com.sap.innovision.view.Detail
 		 */
-		
+		formatter: formatter,
 		onInit: function () {
 			this.getView().byId("v1").setVisible(false);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
@@ -29,8 +29,27 @@ sap.ui.define([
 			this.botname = this.oArg.botid;
 			this.sysname = this.oArg.sysid;
 			var oView = this.getView();
+			var	oVizFrame1 = oView.byId("idVizFrame1");
 			oView.byId("title").setText(this.botname);
-		    	var url2 = "http://127.0.0.1:3005/prevdata/"+this.botname+"/"+this.sysname;
+		    	var url1 = "http://127.0.0.1:3005/prevdata/"+this.botname+"/"+this.sysname;
+				$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: url1,
+				cors: true,
+				secure: true,
+				async: false,
+				headers: {
+					'Access-Control-Allow-Origin': '*'
+				},
+				success: function (data, textStatus, jqXHR) {
+				var	oModel1 = new JSONModel();
+				oModel1.setData(data);
+	            //oVizFrame1.setModel(oModel1);
+	            oView.setModel(oModel1);
+				}});
+				
+				var url2 = "http://127.0.0.1:3005/detail/"+this.botname;
 				$.ajax({
 				type: "GET",
 				dataType: "json",
@@ -42,24 +61,59 @@ sap.ui.define([
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-				var	oModel1 = new JSONModel();
-				oModel1.setData(data);
-				console.log("data");
-				console.log(data);
-	            //oVizFrame1.setModel(oModel1);
-	            oView.setModel(oModel1);
+				// var	oModel2 = new JSONModel();
+				// oModel2.setData(data);
+	   //         console.log(oModel2);
+	            // oView.byId("vb1").setModel(oModel2);
+	           oView.byId("a1").setText("Area: "+data.detail[0].area);
+	           oView.byId("d1").setText("Developer: "+data.detail[0].developer);
+	           oView.byId("m1").setText("SPOC: "+data.detail[0].maintainer);
 				}});
-			var	oVizFrame1 = oView.byId("idVizFrame1");
+			
 	            var oVizPop = oView.byId("idPopOver2");
 	            oVizFrame1.setVizProperties({
 						title: {
 							visible: true,
 							text: "Test run result"
 						},
+					categoryAxis: {
+					axisTick: {
+						visible: false
+					},
+					axisLine: {
+						visible: false
+					},
+					label:{
+						hideWhenOverlap:false	
+						},
+						title:{text:"Time of run"}
+				},
+				valueAxis: {
+						axisTick: {
+							visible: false
+						},
+						axisLine: {
+							visible: false
+						},
+						title:{
+						hideWhenOverlap:false	
+						}
+						
+					},
+					
 						plotArea: {
+							dataLabel:{
+
+							visible:true,
+							hideWhenOverlap:false,
+							gridline: {
+								visible: false
+							}
+							},
 
 							colorPalette: ['#44d46a', '#fa6964']
 						}
+				
 					});
 	        oVizPop.connect(oVizFrame1.getVizUid());
 			var html=this.getView().byId("html");
@@ -67,6 +121,8 @@ sap.ui.define([
 			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
 		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
             html.setContent(data1);
+            var barchart = this.getView().byId("idVizFrame1");
+           
             
             
             this.fav = this.botname_url+","+this.sysname;
@@ -84,18 +140,19 @@ sap.ui.define([
 				},
 				success: function (data, textStatus, jqXHR) {
 					var fav_btn = oView.byId("fav");
-		            if(data === "not found")
+		            if(data === "not found"){
 		            fav_btn.setIcon("sap-icon://add-favorite");
+		            //fav_btn.setTooltip("Add to favourites");
+		            }
 		            else 
 		            fav_btn.setIcon("sap-icon://favorite");
-		            
+		            //fav_btn.setTooltip("Remove from favourites");
 				}});
 				},
 		onSendEmailPress: function(oEvent){
-			//var developer = sap.ui.getCore().byId(evt.getParameter('id')).getValue();
-			var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
-		    var data1 = "<iframe src='"+url+"' height='800' width='100%'/>";
-			sap.m.URLHelper.triggerEmail(" ", "Info Request",url);
+		   var Developer = ((this.getView().byId("d1").getText()).split(":"))[1];
+		   var Maintainer =((this.getView().byId("m1").getText()).split(":"))[1];
+			sap.m.URLHelper.triggerEmail(Developer, "Bot run details: "+this.botname,"Bot Report: "+this.rurl+" //nBot log: "+((this.rurl).replace("report","log")),Maintainer);
 			},
 		onLogClick: function(oEvent){
 		var html=this.getView().byId("html");
@@ -216,6 +273,7 @@ sap.ui.define([
 					MessageToast.show("Removed from favourites");
 					//fav_btn.setEnabled(false);
 					fav_btn.setIcon("sap-icon://add-favorite");
+					//fav_btn.setTooltip("Add to favourites");
 				}});
 						
 						oDialog.close();
@@ -251,6 +309,7 @@ sap.ui.define([
 				success: function (data, textStatus, jqXHR) {
 					MessageToast.show("Added to favourites");
 					fav_btn.setIcon("sap-icon://favorite");
+					//fav_btn.setTooltip("Remove from favourites");
 					
 				}});
 		}

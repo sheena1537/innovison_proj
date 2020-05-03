@@ -10,9 +10,13 @@ sap.ui.define([], function () {
 		 * @returns {string} formatted status
 		 */
 		status : function (sStatus) {
-		var datime =sStatus.slice(6,8)+"/"+sStatus.slice(4,6)+"/"+sStatus.slice(0,4)+" "+sStatus.slice(9,21);
+		     var datime;
+			if((sStatus === undefined)||(sStatus === null))
+			{return null;}
+			else{
+	     	datime=sStatus.slice(6,8)+"/"+sStatus.slice(4,6)+"/"+sStatus.slice(0,4)+" "+sStatus.slice(9,21);
+			}
 			return datime;
-		// return sStatus;
 		},
 		
 		name : function (name) {
@@ -21,13 +25,11 @@ sap.ui.define([], function () {
 		// return sStatus;
 		},
 		
-		info: function(name){
-		if(name === "")
-		return "none";
-		return name;
+		info: function(msg){
+			if((msg === null)||(msg === undefined)||(msg === " "))
+			return "none";
+			return msg;
 		},
-	
-	
 	
 			status1 :  function (sStatus) {
 			if (sStatus === "PASS") {
