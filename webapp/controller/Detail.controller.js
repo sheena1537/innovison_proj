@@ -110,8 +110,9 @@ sap.ui.define([
 								visible: false
 							}
 							},
+							drawingEffect: 'glossy',
 
-							colorPalette: ['#44d46a', '#fa6964']
+							colorPalette: ['#4cba6b', '#f33334']
 						}
 				
 					});
@@ -127,7 +128,7 @@ sap.ui.define([
             
             this.fav = this.botname_url+","+this.sysname;
             //var fav_url = "http://localhost:3001/output/i518733/bot1";
-            var fav_url = "http://localhost:3001/output/i518733/"+this.fav;
+            var fav_url = "http://localhost:3005/fav/i518733/"+this.fav;
             	$.ajax({
 				type: "GET",
 				//dataType: "json",
@@ -152,7 +153,7 @@ sap.ui.define([
 		onSendEmailPress: function(oEvent){
 		   var Developer = ((this.getView().byId("d1").getText()).split(":"))[1];
 		   var Maintainer =((this.getView().byId("m1").getText()).split(":"))[1];
-			sap.m.URLHelper.triggerEmail(Developer, "Bot run details: "+this.botname,"Bot Report: "+this.rurl+" //nBot log: "+((this.rurl).replace("report","log")),Maintainer);
+			sap.m.URLHelper.triggerEmail(Developer, "Bot run details: "+this.botname,"Bot Report: "+this.rurl+" Bot log: "+((this.rurl).replace("report","log")),Maintainer);
 			},
 		onLogClick: function(oEvent){
 		var html=this.getView().byId("html");
@@ -256,7 +257,7 @@ sap.ui.define([
 					text: "Remove",
 					press: function () {
 						//MessageToast.show('Submit pressed!');
-		     	var url = "http://127.0.0.1:3001/addfav/i518733/"+t.fav+"/remove";
+		     	var url = "http://127.0.0.1:3005/addfav/i518733/"+t.fav+"/remove";
 		     	
 		     	console.log(url);
 		     	$.ajax({
@@ -295,7 +296,7 @@ sap.ui.define([
 		
 		else
 		{
-		var url = "http://127.0.0.1:3001/addfav/i518733/"+this.fav+"/add";
+		var url = "http://127.0.0.1:3005/addfav/i518733/"+this.fav+"/add";
 			$.ajax({
 				type: "PUT",
 				//dataType: "json",

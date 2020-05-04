@@ -223,7 +223,7 @@ sap.ui.define([
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "http://localhost:3001/output/i518733",
+				url: "http://localhost:3005/fav/i518733",
 				cors: true,
 				secure: true,
 				async: false,
