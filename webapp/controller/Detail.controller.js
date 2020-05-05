@@ -12,18 +12,14 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("com.sap.innovision.controller.Detail", {
-
-		/**
-		 * Called when a controller is instantiated and its View controls (if available) are already created.
-		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-		 * @memberOf com.sap.innovision.view.Detail
-		 */
+		
 		formatter: formatter,
+		
 		onInit: function () {
-			this.getView().byId("v1").setVisible(false);
 			var oR = sap.ui.core.UIComponent.getRouterFor(this);
 			oR.getRoute("Detail_r").attachMatched(this._onAttachMatched, this);
 		},
+		
 		_onAttachMatched: function(oEvent){
 			this.oArg = oEvent.getParameter("arguments");
 			this.botname = this.oArg.botid;
@@ -31,6 +27,8 @@ sap.ui.define([
 			var oView = this.getView();
 			var	oVizFrame1 = oView.byId("idVizFrame1");
 			oView.byId("title").setText(this.botname);
+			
+			//obtain the past 5 test runs data to display in the chart
 		    	var url1 = "http://127.0.0.1:3005/prevdata/"+this.botname+"/"+this.sysname;
 				$.ajax({
 				type: "GET",
@@ -49,6 +47,7 @@ sap.ui.define([
 	            oView.setModel(oModel1);
 				}});
 				
+				//obtain details of the area, developer and spoc of each bot
 				var url2 = "http://127.0.0.1:3005/detail/"+this.botname;
 				$.ajax({
 				type: "GET",
@@ -61,15 +60,14 @@ sap.ui.define([
 					'Access-Control-Allow-Origin': '*'
 				},
 				success: function (data, textStatus, jqXHR) {
-				// var	oModel2 = new JSONModel();
-				// oModel2.setData(data);
-	   //         console.log(oModel2);
+				// var	oModel2 = new JSONModel(data);
 	            // oView.byId("vb1").setModel(oModel2);
 	           oView.byId("a1").setText("Area: "+data.detail[0].area);
 	           oView.byId("d1").setText("Developer: "+data.detail[0].developer);
 	           oView.byId("m1").setText("SPOC: "+data.detail[0].maintainer);
 				}});
 			
+			    //set properties of viz chart
 	            var oVizPop = oView.byId("idPopOver2");
 	            oVizFrame1.setVizProperties({
 						title: {
@@ -77,58 +75,29 @@ sap.ui.define([
 							text: "Test run result"
 						},
 					categoryAxis: {
-					axisTick: {
-						visible: false
-					},
-					axisLine: {
-						visible: false
-					},
-					label:{
-						hideWhenOverlap:false	
-						},
-						title:{text:"Time of run"}
-				},
-				valueAxis: {
-						axisTick: {
-							visible: false
-						},
-						axisLine: {
-							visible: false
-						},
-						title:{
-						hideWhenOverlap:false	
-						}
-						
-					},
-					
-						plotArea: {
-							dataLabel:{
-
+						    title:{text:"Time of run"}
+			        	},
+					plotArea: {
+						dataLabel:{
 							visible:true,
-							hideWhenOverlap:false,
-							gridline: {
-								visible: false
-							}
+							hideWhenOverlap:false
 							},
 							drawingEffect: 'glossy',
-
 							colorPalette: ['#4cba6b', '#f33334']
 						}
-				
 					});
 	        oVizPop.connect(oVizFrame1.getVizUid());
+	        
+	        //to display report
 			var html=this.getView().byId("html");
 			this.botname_url = (this.botname).replace(/ /g, "%20");
 			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
 		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
             html.setContent(data1);
-            var barchart = this.getView().byId("idVizFrame1");
-           
             
-            
+            //to check if the bot is a part of the favourites list of user and accordingly change the icon of favourites button
             this.fav = this.botname_url+","+this.sysname;
-            //var fav_url = "http://localhost:3001/output/i518733/bot1";
-            var fav_url = "http://localhost:3005/fav/i518733/"+this.fav;
+            var fav_url = "http://localhost:3001/fav/i518733/"+this.fav;
             	$.ajax({
 				type: "GET",
 				//dataType: "json",
@@ -150,34 +119,35 @@ sap.ui.define([
 		            //fav_btn.setTooltip("Remove from favourites");
 				}});
 				},
+				
+				
 		onSendEmailPress: function(oEvent){
 		   var Developer = ((this.getView().byId("d1").getText()).split(":"))[1];
 		   var Maintainer =((this.getView().byId("m1").getText()).split(":"))[1];
 			sap.m.URLHelper.triggerEmail(Developer, "Bot run details: "+this.botname,"Bot Report: "+this.rurl+" Bot log: "+((this.rurl).replace("report","log")),Maintainer);
 			},
+			
 		onLogClick: function(oEvent){
 		var html=this.getView().byId("html");
 		this.lurl = (this.rurl).replace("report","log");
-		//var url = "http://127.0.0.1:3005/log/"+this.botname_url+"/"+this.sysname;
 		var data1 = "<iframe src='"+this.lurl+"' height='800' width='100%'/>";
         html.setContent(data1);
-        this.getView().byId("gb").setVisible(true);
-        //this.getView().byId("openMenu").setVisible(false);
-			
+        this.getView().byId("gb").setVisible(true);//go back button enabled to view report
 		},
+		
+		//trigerred on pressing go back function
 		onBack: function(oEvent){
-			var html=this.getView().byId("html");
-		//var url = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname;
+		var html=this.getView().byId("html");
 		this.rurl = (this.lurl).replace("log","report");
-		 var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
-         html.setContent(data1);
+		var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
+        html.setContent(data1);
 		this.getView().byId("gb").setVisible(false);
 		this.getView().byId("openMenu").setVisible(true);
 		},
 
-			handleMenuItemPress: function(oEvent) {
+        /* on click of an item in view previous reports drop down menu show the report associated with that particular day*/
+		handleMenuItemPress: function(oEvent) {
 			var oItem = oEvent.getParameter("item");
-			var	sMessage = "'" + oItem.getText() + "' pressed";
 			var time =  oItem.getText();
 			var time_url = (time).replace(/ /g, "%20");
 			this.rurl = "http://127.0.0.1:3005/report/"+this.botname_url+"/"+this.sysname+"/"+time_url;
@@ -185,7 +155,9 @@ sap.ui.define([
 		    var data1 = "<iframe src='"+this.rurl+"' height='800' width='100%'/>";
             html.setContent(data1);
 		},
-			toggleFullScreen: function () {
+		
+		
+		toggleFullScreen: function () {
 			var oModel = this.getView().getModel("app");
 			var bFullScreen = oModel.getProperty("/actionButtonsInfo/midColumn/fullScreen");
 			oModel.setProperty("/actionButtonsInfo/midColumn/fullScreen", !bFullScreen);
@@ -198,26 +170,27 @@ sap.ui.define([
 				oModel.setProperty("/layout", oModel.getProperty("/previousLayout"));
 			}
 		},
+		
 		onCloseDetailPress: function () {
 			var oListItem=sap.ui.getCore().byId("container-innovision---master_id--list").getSelectedItem();
-			console.log(sap.ui.getCore().byId("container-innovision---master_id--list"));
-			console.log(oListItem);
 			sap.ui.getCore().byId("container-innovision---master_id--list").setSelectedItem(oListItem, false);
 			var oModel = this.getView().getModel("app");
 			oModel.setProperty("/actionButtonsInfo/midColumn/fullScreen", false);
 			oModel.setProperty("/layout", "OneColumn");
-			
-			console.log("here master");
 			this.getOwnerComponent().getRouter().navTo("Master_r", {}, true);
 		},
+		
 		myChartClickHandler: function(oEvent){
-			//console.log(oEvent.getParameters());
 			var content = oEvent.getParameters();
 			var timestamp = content.data[0].data.Time;
 			var criteria = (content.data[0].data.measureNames).toUpperCase();
 			var oView=this.getView();
+			
+			//display vbox containing the table
 			oView.byId("v1").setVisible(true);
-				//var url ="http://localhost:3005/output/Intelligent%20Production%20Order%20Conversion/OP_1909/Mon,%2027%20Apr%202020%2006:12:36%20GMT/FAIL";
+			
+			/*obtain the test case details of a particular day according to the criteria => pass/fail
+			and display it in the table when the user clicks on the bar chart*/
 		    var time_url = (timestamp).replace(/ /g, "%20");
 			var url = "http://127.0.0.1:3005/output/"+this.botname_url+"/"+this.sysname+"/"+time_url+"/"+criteria;
 			$.ajax({
@@ -234,18 +207,20 @@ sap.ui.define([
 				var Jmod = new JSONModel(data);
 				oView.byId("t1").setModel(Jmod);
 				}});
-			//alert("clicked");
 		},
+		
 		onCloseTable:function(oEvent){
 			this.getView().byId("v1").setVisible(false);
 		},
+		
 		addtofav:function(oEvent){
 		var oView = this.getView();
 		var fav_btn = oView.byId("fav");
 		var fav_icon = fav_btn.getIcon();
 		
 		
-		
+		/* if fav_icon=>sap-icon://favorite : then this bot is already a part of favourites 
+		so bring up the remove from favourites option on click of the fav_btn*/
 		if(fav_icon === "sap-icon://favorite")
 		{   var t =this;
 			var oDialog = new Dialog({
@@ -256,10 +231,7 @@ sap.ui.define([
 					type: Button.Emphasized,
 					text: "Remove",
 					press: function () {
-						//MessageToast.show('Submit pressed!');
-		     	var url = "http://127.0.0.1:3005/addfav/i518733/"+t.fav+"/remove";
-		     	
-		     	console.log(url);
+		     	var url = "http://127.0.0.1:3001/addfav/i518733/"+t.fav+"/remove";
 		     	$.ajax({
 				type: "PUT",
 				//dataType: "json",
@@ -272,11 +244,9 @@ sap.ui.define([
 				},
 				success: function (data, textStatus, jqXHR) {
 					MessageToast.show("Removed from favourites");
-					//fav_btn.setEnabled(false);
 					fav_btn.setIcon("sap-icon://add-favorite");
 					//fav_btn.setTooltip("Add to favourites");
 				}});
-						
 						oDialog.close();
 					}
 				}),
@@ -294,9 +264,10 @@ sap.ui.define([
 			oDialog.open();
 		}
 		
+		//if bot is not a part of favourite list of user then add it
 		else
 		{
-		var url = "http://127.0.0.1:3005/addfav/i518733/"+this.fav+"/add";
+		var url = "http://127.0.0.1:3001/addfav/i518733/"+this.fav+"/add";
 			$.ajax({
 				type: "PUT",
 				//dataType: "json",
@@ -311,7 +282,6 @@ sap.ui.define([
 					MessageToast.show("Added to favourites");
 					fav_btn.setIcon("sap-icon://favorite");
 					//fav_btn.setTooltip("Remove from favourites");
-					
 				}});
 		}
 		}

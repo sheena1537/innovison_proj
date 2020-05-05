@@ -2,81 +2,51 @@
 	controllerName="com.sap.innovision.controller.Master" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:tnt="sap.tnt">
 	<App>
 		<pages>
-			<Page id="master_id" class="masterp" >
+			<Page id="master_id" class="masterp">
 				<content>
-	<!--<semantic:SemanticPage id="master_id" preserveHeaderStateOnScroll="true" toggleHeaderOnTitleClick="false">-->
-		
-	<!--	<semantic:content>-->
-				<tnt:ToolHeader>
+					<tnt:ToolHeader>
 						<Image src="test-resources/sap/tnt/images/SAP_Logo.png"/>
 						<Text text="S/4 RPAC Test Automation Framework" wrapping="false"/>
 					</tnt:ToolHeader>
-			<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/}" noDataText="No data available"
-				mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}" growing="true" growingScrollToLoad="true"
-				updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
-				<infoToolbar>
-					<Toolbar active="true" id="filterBar" visible="{masterView>/isFilterBarVisible}" press=".onOpenViewSettings">
-						<Title id="filterBarLabel" text="{masterView>/filterBarLabel}" level="H3"/>
-					</Toolbar>
-				</infoToolbar>
-				<headerToolbar>
-					<OverflowToolbar>
-						<SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" search=".onSearch" width="auto">
-							<layoutData>
-								<OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>
-							</layoutData>
-						</SearchField>
-						<ToolbarSpacer/>
-						<Button id="sortButton" press=".onSort" icon="sap-icon://sort" type="Transparent"/>
-						<Button id="filterButton" press=".handleFilterButtonPressed" icon="sap-icon://filter" type="Transparent"/>
-						<Button id="favbtn" press=".showFavouritesMenu" icon="sap-icon://favorite-list" type="Transparent" tooltip="View favourites"/>
-					   
-					</OverflowToolbar>
-				</headerToolbar>
-				<items>
-					<!--<ObjectListItem type="Navigation" press=".onSelectionChange" title="{path: '_attributes/source', formatter: '.formatter.name'}">-->
-						
-					<!--	<firstStatus>-->
-					<!--		<ObjectStatus text="{path: 'status/_attributes/status'}" icon="sap-icon://circle-task-2"-->
-					<!--			state="{ path: 'status/_attributes/status', formatter: '.formatter.status1' }"/>-->
-							
-					<!--	</firstStatus>-->
-					
-					<!--	<attributes>-->
-							<!--<Button id="favbtn1" press=".addTofav" icon="sap-icon://favorite-list" type="Transparent" tooltip="View favourites"/>-->
-					<!--	<ObjectAttribute  text="status: {  path: 'status/_attributes/status' }"/>-->
-					<!--			<ObjectAttribute text="Last run: { parts:[ {path:'status/_attributes/starttime'}], formatter: '.formatter.status' }"/>-->
-					<!--		    <ObjectAttribute text="system: { parts:[ {path:'_attributes/name'}], formatter: '.formatter.system' }"/>-->
-					<!--		    <ObjectAttribute id="favlst" active="true" press=".onFavicnPress"/>-->
-							    
-					<!--	</attributes>-->
-					
-					<!--</ObjectListItem>-->
-						<ObjectListItem type="Navigation" press=".onSelectionChange" title="{path: 'botdetails/detail/0/botName'}">
-						
-						<firstStatus>
-							<ObjectStatus text="{path: 'maindetails/0/output/robot/suite/status/_attributes/status'}" icon="sap-icon://circle-task-2"
-								state="{ path: 'maindetails/0/output/robot/suite/status/_attributes/status', formatter: '.formatter.status1' }"/>
-							
-						</firstStatus>
-					
-						<attributes>
-							
-						<!--<ObjectAttribute  text="status: {  path: 'maindetails/0/output/robot/suite/status/_attributes/status' }"/>-->
-								<ObjectAttribute text="Last run: { parts:[ {path:'maindetails/0/output/robot/suite/status/_attributes/starttime'}], formatter: '.formatter.status' }"/>
-							    <ObjectAttribute id="sys1" text="system: { parts:[ {path:'maindetails/0/output/robot/statistics/suite/stat/_text'}], formatter: '.formatter.system' }"/>
-							    <ObjectAttribute id="favlst" active="true" press=".onFavicnPress"/>
-							    
-						</attributes>
-					
-					</ObjectListItem>
-				</items>
-			</List>
-	<!--	</semantic:content>-->
-	<!--</semantic:SemanticPage>-->
-	</content>
-	</Page>
-	</pages>
+					<List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{/}" noDataText="No data available"
+						mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}" growing="true" growingScrollToLoad="true"
+						updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
+						<infoToolbar>
+							<Toolbar active="true" id="filterBar" visible="{masterView>/isFilterBarVisible}" press=".onOpenViewSettings">
+								<Title id="filterBarLabel" text="{masterView>/filterBarLabel}" level="H3"/>
+							</Toolbar>
+						</infoToolbar>
+						<headerToolbar>
+							<OverflowToolbar>
+								<SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" search=".onSearch" width="auto">
+									<layoutData>
+										<OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>
+									</layoutData>
+								</SearchField>
+								<ToolbarSpacer/>
+								<Button id="sortButton" press=".onSort" icon="sap-icon://sort" type="Transparent"/>
+								<Button id="filterButton" press=".handleFilterButtonPressed" icon="sap-icon://filter" type="Transparent"/>
+								<Button id="favbtn" press=".showFavouritesMenu" icon="sap-icon://favorite-list" type="Transparent" tooltip="View favourites"/>
+							</OverflowToolbar>
+						</headerToolbar>
+						<items>
+							<ObjectListItem type="Navigation" press=".onSelectionChange" title="{path: 'botdetails/detail/0/botName'}">
+								<firstStatus>
+									<ObjectStatus text="{path: 'maindetails/0/output/robot/suite/status/_attributes/status'}" icon="sap-icon://circle-task-2"
+										state="{ path: 'maindetails/0/output/robot/suite/status/_attributes/status', formatter: '.formatter.status1' }"/>
+								</firstStatus>
+								<attributes>
+									<ObjectAttribute
+										text="Last run: { parts:[ {path:'maindetails/0/output/robot/suite/status/_attributes/starttime'}], formatter: '.formatter.date_time' }"/>
+									<ObjectAttribute id="sys1"
+										text="system: { parts:[ {path:'maindetails/0/output/robot/statistics/suite/stat/_text'}], formatter: '.formatter.system' }"/>
+									<ObjectAttribute id="favlst" active="true" press=".onFavicnPress"/>
+								</attributes>
+							</ObjectListItem>
+						</items>
+					</List>
+				</content>
+			</Page>
+		</pages>
 	</App>
-
 </mvc:View>

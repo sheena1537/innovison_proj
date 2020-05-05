@@ -16,7 +16,7 @@
 			<!--</VBox>-->
 			<ObjectAttribute id="a1"/>
 			<ObjectAttribute id="d1"/>
-			<ObjectAttribute id="m1" />
+			<ObjectAttribute id="m1"/>
 			<viz:Popover id="idPopOver2"></viz:Popover>
 			<viz:VizFrame id="idVizFrame1" selectData="myChartClickHandler" uiConfig="{applicationSet:'fiori'}" height="350px" width="100%"
 				vizType='stacked_column'>
@@ -36,7 +36,10 @@
 					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Time" height="700px" hideWhenOverlap="false"/>
 				</viz:feeds>
 			</viz:VizFrame>
-			<VBox id="v1">
+			
+			<!--table containing the details of the test cases that have passed or failed is set to visible only
+		        	when the user clicks on the corressponding red or green portion of the viz chart-->
+			<VBox id="v1" visible="false">
 				<Button icon="sap-icon://decline" press=".onCloseTable" tooltip="close table"/>
 				<Table noDataText="Drop column list items here and columns in the area above" id="t1" items="{/}">
 					<items>
@@ -45,8 +48,8 @@
 							<cells>
 								<Text text="{_attributes/id}" id="text0"/>
 								<Text text="{_attributes/name}" id="text1"/>
-								<Text text="{path:'status/_attributes/starttime', formatter: '.formatter.status' }" id="text2"/>
-								<Text text="{path:'status/_attributes/endtime', formatter: '.formatter.status' }" id="text3"/>
+								<Text text="{path:'status/_attributes/starttime', formatter: '.formatter.date_time' }" id="text2"/>
+								<Text text="{path:'status/_attributes/endtime', formatter: '.formatter.date_time' }" id="text3"/>
 								<Text text="{status/_attributes/critical}" id="text4"/>
 								<Text text="{path:'status/_text', formatter: '.formatter.info' }" id="text5"/>
 							</cells>
@@ -94,23 +97,19 @@
 					<MenuButton text="Previous Reports" buttonMode="Split" useDefaultActionOnly="true">
 						<menu>
 							<Menu itemSelected="handleMenuItemPress" items="{/}">
-								<MenuItem text="{created}" />
-								
+								<MenuItem text="{created}"/>
 							</Menu>
 						</menu>
 					</MenuButton>
 					<layout:HorizontalLayout>
-						<!--<Button id="openMenu" text="View Previous Reports" press="handlePressOpenMenu"/>-->
 						<Button id="fav" icon="sap-icon://add-favorite" press="addtofav"/>
 					</layout:HorizontalLayout>
 				</content>
 			</Toolbar>
-			<!--<Button text="View Log" press=".onLogClick"/>-->
 		</semantic:headerContent>
 		<semantic:content>
 			<core:HTML id="html"></core:HTML>
 		</semantic:content>
-		<!--Semantic ShareMenu Buttons-->
 		<semantic:sendEmailAction>
 			<semantic:SendEmailAction id="shareEmail" press=".onSendEmailPress"/>
 		</semantic:sendEmailAction>

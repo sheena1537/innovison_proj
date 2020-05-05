@@ -9,7 +9,7 @@ sap.ui.define([], function () {
 		 * @param {string} sStatus value to be formatted
 		 * @returns {string} formatted status
 		 */
-		status : function (sStatus) {
+		date_time : function (sStatus) {
 		     var datime;
 			if((sStatus === undefined)||(sStatus === null))
 			{return null;}
@@ -22,7 +22,6 @@ sap.ui.define([], function () {
 		name : function (name) {
 		    var chatbot_name = (name.split('\\')).slice(-2,-1);
 			return chatbot_name;
-		// return sStatus;
 		},
 		
 		info: function(msg){
@@ -31,7 +30,7 @@ sap.ui.define([], function () {
 			return msg;
 		},
 	
-			status1 :  function (sStatus) {
+		status1 :  function (sStatus) {
 			if (sStatus === "PASS") {
 					return "Success";
 				} else if (sStatus === "RUNNING") {
